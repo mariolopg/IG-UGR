@@ -347,42 +347,60 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num)
         caras[c]._0 = num * num_aux - num_aux + i;
         caras[c]._1 = num * num_aux - (num_aux - i - 1);
         caras[c]._2 = i + 1;
+
+        c += 1;
     }
 
-    vertices.resize(num_aux * num + 2);
-    caras.resize(2 * num * (num_aux - 1) + 1);
+    //Redimiensiono para añadir las nuevas caras y el vértice
+    vertices.resize(vertices.size() + 1);
+    caras.resize(caras.size() + num);
 
     // Vertice central de tapa inferior
-    vertice_aux.x = 0;
-    vertice_aux.y = perfil[0].y;
-    vertice_aux.z = 0;
-    vertices[num_aux * num] = vertice_aux;
-
-    // Vertice central de tapa superior
-    
-    vertice_aux.y = perfil[num_aux-1].y;
-    vertices[num_aux * num + 1] = vertice_aux;
+    vertices[vertices.size() - 1].x = 0;
+    vertices[vertices.size() - 1].y = perfil[0].y;
+    vertices[vertices.size() - 1].z = 0;    
 
     // tapa inferior
     if (fabs(perfil[0].x) > 0.0)
     {
         for(int i = 0; i < num - 1; i++){
-            caras[c]._0 = i;
-            caras[c]._1 = i + 1;
-            caras[c]._0 = num_aux * num;
+            caras[c]._0 = i * num_aux;
+            caras[c]._1 = vertices.size() - 1;
+            caras[c]._2 = num_aux * (i + 1);
+
+            c += 1;
         }
+
+        caras[c]._0 = 0;
+        caras[c]._1 = vertices.size() - 1;
+        caras[c]._2 = num_aux * (num - 1);
 
         c += 1;
 
     }
 
+    //Redimiensiono para añadir las nuevas caras y el vértice
+    vertices.resize(vertices.size() + 1);
+    caras.resize(caras.size() + num);
+
+    // Vertice central de tapa superior
+    vertices[vertices.size() - 1].x = 0;
+    vertices[vertices.size() - 1].y = perfil[num_aux - 1].y;
+    vertices[vertices.size() - 1].z = 0;
+
     // tapa superior
     if (fabs(perfil[num_aux - 1].x) > 0.0)
     {
         for(int i = 0; i < num - 1; i++){
-            caras[c]._0 = i;
-            caras[c]._1 = i + 1;
-            caras[c]._0 = num_aux * num + 1;
+            caras[c]._0 = (i + 1) * num_aux - 1;
+            caras[c]._1 = vertices.size() - 1;
+            caras[c]._2 = (i + 2) * num_aux - 1;
+
+            c += 1;
         }
+
+        caras[c]._0 = num_aux - 1;
+        caras[c]._1 = vertices.size() - 1;
+        caras[c]._2 = num_aux * num - 1;
     }
 }
