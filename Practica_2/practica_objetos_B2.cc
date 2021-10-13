@@ -192,21 +192,32 @@ glutPostRedisplay();
 
 //***************************************************************************
 
-void special_key(int Tecla1,int x,int y)
+void special_key(int Tecla1, int x, int y)
 {
 
-switch (Tecla1){
-	case GLUT_KEY_LEFT:Observer_angle_y--;break;
-	case GLUT_KEY_RIGHT:Observer_angle_y++;break;
-	case GLUT_KEY_UP:Observer_angle_x--;break;
-	case GLUT_KEY_DOWN:Observer_angle_x++;break;
-	case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
-	case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+	switch (Tecla1)
+	{
+		case GLUT_KEY_LEFT:
+			Observer_angle_y--;
+			break;
+		case GLUT_KEY_RIGHT:
+			Observer_angle_y++;
+			break;
+		case GLUT_KEY_UP:
+			Observer_angle_x--;
+			break;
+		case GLUT_KEY_DOWN:
+			Observer_angle_x++;
+			break;
+		case GLUT_KEY_PAGE_UP:
+			Observer_distance *= 1.2;
+			break;
+		case GLUT_KEY_PAGE_DOWN:
+			Observer_distance /= 1.2;
+			break;
 	}
-glutPostRedisplay();
+	glutPostRedisplay();
 }
-
-
 
 //***************************************************************************
 // Funcion de incializacion
@@ -215,30 +226,26 @@ glutPostRedisplay();
 void initialize(void)
 {
 
-// se inicalizan la ventana y los planos de corte
-Size_x=0.5;
-Size_y=0.5;
-Front_plane=1;
-Back_plane=1000;
+	// se inicalizan la ventana y los planos de corte
+	Size_x = 0.5;
+	Size_y = 0.5;
+	Front_plane = 1;
+	Back_plane = 1000;
 
-// se incia la posicion del observador, en el eje z
-Observer_distance=4*Front_plane;
-Observer_angle_x=0;
-Observer_angle_y=0;
+	// se incia la posicion del observador, en el eje z
+	Observer_distance = 4 * Front_plane;
+	Observer_angle_x = 0;
+	Observer_angle_y = 0;
 
-// se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
-// blanco=(1,1,1,1) rojo=(1,0,0,1), ...
-glClearColor(1,1,1,1);
+	// se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
+	// blanco=(1,1,1,1) rojo=(1,0,0,1), ...
+	glClearColor(1, 1, 1, 1);
 
-// se habilita el z-bufer
-glEnable(GL_DEPTH_TEST);
-change_projection();
-glViewport(0,0,Window_width,Window_high);
-
-
-
+	// se habilita el z-bufer
+	glEnable(GL_DEPTH_TEST);
+	change_projection();
+	glViewport(0, 0, Window_width, Window_high);
 }
-
 
 //***************************************************************************
 // Programa principal
@@ -247,74 +254,98 @@ glViewport(0,0,Window_width,Window_high);
 // bucle de eventos
 //***************************************************************************
 
-
-int main(int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
- 
 
+	// perfil
 
+	vector<_vertex3f> perfil2;
+	_vertex3f aux;
 
-// perfil 
+	// Perfil original
+	// aux.x = 1.2;
+	// aux.y = -1.0;
+	// aux.z = 0.0;
+	// perfil2.push_back(aux);
+	// aux.x = 0.6;
+	// aux.y = 0.0;
+	// aux.z = 0.0;
+	// perfil2.push_back(aux);
+	// aux.x = 1.2;
+	// aux.y = 1.2;
+	// aux.z = 0.0;
+	// perfil2.push_back(aux);
+	// aux.x = 1.8;
+	// aux.y = 1.8;
+	// aux.z = 0.0;
+	// perfil2.push_back(aux);
 
-vector<_vertex3f> perfil2;
-_vertex3f aux;
+	//Perfil Mario
+	aux.x = 2;
+	aux.y = 0;
+	aux.z = 0;
+	perfil2.push_back(aux);
+	aux.x = 3;
+	aux.y = 1.5;
+	aux.z = 0;
+	perfil2.push_back(aux);
+	aux.x = 2;
+	aux.y = 2.5;
+	aux.z = 0;
+	perfil2.push_back(aux);
+	aux.x = 1;
+	aux.y = 3;
+	aux.z = 0;
+	perfil2.push_back(aux);
+	aux.x = 2;
+	aux.y = 4;
+	aux.z = 0;
+	perfil2.push_back(aux);
 
-aux.x=1.2; aux.y=-1.0; aux.z=0.0;
-perfil2.push_back(aux);
-aux.x=0.6; aux.y=0.0; aux.z=0.0;
-perfil2.push_back(aux);
-aux.x=1.2; aux.y=1.2; aux.z=0.0;
-perfil2.push_back(aux);
-aux.x=1.8; aux.y=1.8; aux.z=0.0;
-perfil2.push_back(aux);
+	rotacion.parametros(perfil2, 12);
 
+	// se llama a la inicialización de glut
+	glutInit(&argc, argv);
 
-rotacion.parametros(perfil2,12);
+	// se indica las caracteristicas que se desean para la visualización con OpenGL
+	// Las posibilidades son:
+	// GLUT_SIMPLE -> memoria de imagen simple
+	// GLUT_DOUBLE -> memoria de imagen doble
+	// GLUT_INDEX -> memoria de imagen con color indizado
+	// GLUT_RGB -> memoria de imagen con componentes rojo, verde y azul para cada pixel
+	// GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
+	// GLUT_DEPTH -> memoria de profundidad o z-bufer
+	// GLUT_STENCIL -> memoria de estarcido_rotation Rotation;
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
+	// posicion de la esquina inferior izquierdad de la ventana
+	glutInitWindowPosition(Window_x, Window_y);
 
+	// tamaño de la ventana (ancho y alto)
+	glutInitWindowSize(Window_width, Window_high);
 
-// se llama a la inicialización de glut
-glutInit(&argc, argv);
+	// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
+	// al bucle de eventos)
+	glutCreateWindow("PRACTICA - 2");
 
-// se indica las caracteristicas que se desean para la visualización con OpenGL
-// Las posibilidades son:
-// GLUT_SIMPLE -> memoria de imagen simple
-// GLUT_DOUBLE -> memoria de imagen doble
-// GLUT_INDEX -> memoria de imagen con color indizado
-// GLUT_RGB -> memoria de imagen con componentes rojo, verde y azul para cada pixel
-// GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
-// GLUT_DEPTH -> memoria de profundidad o z-bufer
-// GLUT_STENCIL -> memoria de estarcido_rotation Rotation;
-glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	// asignación de la funcion llamada "dibujar" al evento de dibujo
+	glutDisplayFunc(draw);
+	// asignación de la funcion llamada "change_window_size" al evento correspondiente
+	glutReshapeFunc(change_window_size);
+	// asignación de la funcion llamada "normal_key" al evento correspondiente
+	glutKeyboardFunc(normal_key);
+	// asignación de la funcion llamada "tecla_Especial" al evento correspondiente
+	glutSpecialFunc(special_key);
 
-// posicion de la esquina inferior izquierdad de la ventana
-glutInitWindowPosition(Window_x,Window_y);
+	// funcion de inicialización
+	initialize();
 
-// tamaño de la ventana (ancho y alto)
-glutInitWindowSize(Window_width,Window_high);
+	// creación del objeto ply
+	ply.parametros(argv[1]);
 
-// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
-// al bucle de eventos)
-glutCreateWindow("PRACTICA - 2");
+	//ply1 = new _objeto_ply(argv[1]);
 
-// asignación de la funcion llamada "dibujar" al evento de dibujo
-glutDisplayFunc(draw);
-// asignación de la funcion llamada "change_window_size" al evento correspondiente
-glutReshapeFunc(change_window_size);
-// asignación de la funcion llamada "normal_key" al evento correspondiente
-glutKeyboardFunc(normal_key);
-// asignación de la funcion llamada "tecla_Especial" al evento correspondiente
-glutSpecialFunc(special_key);
-
-// funcion de inicialización
-initialize();
-
-// creación del objeto ply
-ply.parametros(argv[1]);
-
-//ply1 = new _objeto_ply(argv[1]);
-
-// inicio del bucle de eventos
-glutMainLoop();
-return 0;
+	// inicio del bucle de eventos
+	glutMainLoop();
+	return 0;
 }
