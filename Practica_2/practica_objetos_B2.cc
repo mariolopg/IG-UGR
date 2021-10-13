@@ -286,7 +286,11 @@ int main(int argc, char *argv[])
 	aux.z = 0;
 	perfil2.push_back(aux);
 	aux.x = 3;
-	aux.y = 1.5;
+	aux.y = 1;
+	aux.z = 0;
+	perfil2.push_back(aux);
+	aux.x = 3;
+	aux.y = 1.25;
 	aux.z = 0;
 	perfil2.push_back(aux);
 	aux.x = 2;
