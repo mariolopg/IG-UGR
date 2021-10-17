@@ -33,6 +33,8 @@ _cubo cubo;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
 _rotacion rotacion; 
+_cilindro cilindro(0.5, 1, 30);
+_cono cono(0.5, 1, 30);
 
 // _objeto_ply *ply1;
 
@@ -111,13 +113,23 @@ glEnd();
 void draw_objects()
 {
 
-switch (t_objeto){
-	case CUBO: cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-	case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-        case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
-        case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+	switch (t_objeto)
+	{
+		case CUBO:
+			cubo.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			break;
+		case PIRAMIDE:
+			piramide.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			break;
+		case OBJETO_PLY:
+			ply.draw(modo, 1.0, 0.6, 0.0, 0.0, 1.0, 0.3, 2);
+			break;
+		case ROTACION:
+			// rotacion.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			cilindro.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			//cono.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			break;
 	}
-
 }
 
 
@@ -174,10 +186,10 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
-        case 'P':t_objeto=PIRAMIDE;break;
-        case 'C':t_objeto=CUBO;break;
-        case 'O':t_objeto=OBJETO_PLY;break;	
-        case 'R':t_objeto=ROTACION;break;
+	case 'P':t_objeto=PIRAMIDE;break;
+	case 'C':t_objeto=CUBO;break;
+	case 'O':t_objeto=OBJETO_PLY;break;
+	case 'R':t_objeto=ROTACION;break;
 	}
 glutPostRedisplay();
 }
@@ -306,7 +318,7 @@ int main(int argc, char *argv[])
 	aux.z = 0;
 	perfil2.push_back(aux);
 
-	rotacion.parametros(perfil2, 12);
+	rotacion.parametros(perfil2, 12, 2);
 
 	// se llama a la inicialización de glut
 	glutInit(&argc, argv);

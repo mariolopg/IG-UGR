@@ -85,11 +85,25 @@ int   parametros(char *archivo);
 
 class _rotacion: public _triangulos3D
 {
-public:
-       _rotacion();
-void  parametros(vector<_vertex3f> perfil1, int num1);
+	public:
+		_rotacion();
+		void  parametros(vector<_vertex3f> perfil1, int num1, int tipo); //Tipos --> 0: cilindro / 1: cono / 2: esfera
 
-vector<_vertex3f> perfil; 
-int num;
+		vector<_vertex3f> perfil; 
+		int num;
 };
 
+class _esfera: public _rotacion{
+	public:
+		_esfera(float radio, int n, int m);
+};
+
+class _cono: public _rotacion{
+	public:
+		_cono(float radio, int altura, int m);
+};
+
+class _cilindro: public _rotacion{
+	public:
+		_cilindro(float radio, int altura, int m);
+};
