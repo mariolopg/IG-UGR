@@ -293,10 +293,9 @@ _esfera::_esfera(float radio, int n, int m)
     vector<_vertex3f> perfil1;
     _vertex3f aux;
 
-    for(int i = 0; i < n; i++)
-    {
-        aux.x = radio * cos((M_PI * i / n) - (M_PI / 2.0));
-        aux.y = radio * sin((M_PI * i / n) - (M_PI / 2.0));
+    for(int i = 1; i < n; i++){
+        aux.x = radio * cos(M_PI * i / n - M_PI / 2.0);
+        aux.y = radio * sin(M_PI * i / n - M_PI / 2.0);
         aux.z = 0.0;
         perfil1.push_back(aux);
     }
@@ -364,8 +363,8 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
     int num_aux;
     float radio, altura;
 
-    // Para cilindro:
-    if(tipo == 0){
+    // Para cilindro y esfera:
+    if(tipo == 0 || tipo == 2){
         num_aux = perfil.size();
     }
 
@@ -376,10 +375,8 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
     }
 
     // Para esfera:
-    if(tipo == 2){
-        num_aux = perfil.size();
-        radio=sqrt(perfil[0].x*perfil[0].x+perfil[0].y*perfil[0].y);
-    }
+    if(tipo == 2)
+        radio = sqrt(perfil[0].x*perfil[0].x+perfil[0].y*perfil[0].y);
 
     // tratamiento de los vértice
     vertices.resize(num_aux * num);
@@ -399,52 +396,57 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
 
     caras.resize(2 * (num_aux - 1) * num);
 
-    // tratamiento de las caras 
+    // tratamiento de las caras
+    if(tipo != 1)
     for(int j = 0; j < num - 1; j++){
         for(int i = 0; i < num_aux - 1; i++){
             caras[c]._0 = j * num_aux + i;
             caras[c]._1 = ( j + 1 ) * num_aux + i + 1;
             caras[c]._2 = ( j + 1 ) * num_aux + i;
 
-            c += 1;
+            c++;
 
             caras[c]._0 = j * num_aux + i;
             caras[c]._1 = j * num_aux + i + 1;
             caras[c]._2 = ( j + 1 ) * num_aux + i + 1;
 
-            c += 1;
+            c++;
         }
     }
 
-    // Tratamiento para las ultimas caras 
+    // Tratamiento para las ultimas caras
+    if(tipo != 1)
     for(int i = 0; i < num_aux - 1; i++){
         caras[c]._0 = num * num_aux - num_aux + i;
         caras[c]._1 = i + 1;
         caras[c]._2 = i;
 
-        c += 1;
+        c++;
 
         caras[c]._0 = num * num_aux - num_aux + i;
         caras[c]._1 = num * num_aux - (num_aux - i - 1);
         caras[c]._2 = i + 1;
 
-        c += 1;
+        c++;
     }
 
+        // tapa superior
         //Redimiensiono para añadir las nuevas caras y el vértice
         vertices.resize(vertices.size() + 1);
         caras.resize(caras.size() + num);
+
         // Vertice central de tapa superior
         vertices[vertices.size() - 1].x = 0;
+
         if(tipo == 0)
             vertices[vertices.size() - 1].y = perfil[num_aux - 1].y;
         if(tipo == 1)
             vertices[vertices.size() - 1].y = altura;
         if(tipo == 2)
             vertices[vertices.size() - 1].y = radio;
+
         vertices[vertices.size() - 1].z = 0;
 
-        // tapa superior
         if (fabs(perfil[num_aux - 1].x) > 0.0)
         {
             for(int i = 0; i < num - 1; i++){
@@ -452,16 +454,17 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
                 caras[c]._1 = vertices.size() - 1;
                 caras[c]._2 = (i + 2) * num_aux - 1;
 
-                c += 1;
+                c++;
             }
 
             caras[c]._0 = num_aux * num - 1;
             caras[c]._1 = vertices.size() - 1;
             caras[c]._2 = num_aux - 1;
 
-            c += 1;
+            c++;
         }
 
+        // tapa inferior
         //Redimiensiono para añadir las nuevas caras y el vértice
         vertices.resize(vertices.size() + 1);
         caras.resize(caras.size() + num);
@@ -469,12 +472,11 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
         // Vertice central de tapa inferior
         vertices[vertices.size() - 1].x = 0;
         if(tipo == 0 || tipo == 1)
-            vertices[vertices.size() - 1].y = 0.0;
+            vertices[vertices.size() - 1].y = 0;
         if(tipo == 2)
-            vertices[vertices.size() - 1].y = radio;
-        vertices[vertices.size() - 1].z = 0.0;
+            vertices[vertices.size() - 1].y = -radio;
+        vertices[vertices.size() - 1].z = 0;
 
-        // tapa inferior
         if (fabs(perfil[0].x) > 0.0)
         {
             for(int i = 0; i < num - 1; i++){
@@ -482,19 +484,14 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
                 caras[c]._1 = vertices.size() - 1;
                 caras[c]._2 = num_aux * (i + 1);
 
-                c += 1;
+                c++;
             }
 
             caras[c]._0 = 0;
             caras[c]._1 = vertices.size() - 1;
             caras[c]._2 = num_aux * (num - 1);
 
-            c += 1;
+            c++;
 
         }
-
-    
-    
-    
-    
 }

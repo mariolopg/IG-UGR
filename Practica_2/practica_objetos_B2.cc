@@ -35,6 +35,7 @@ _objeto_ply  ply;
 _rotacion rotacion; 
 _cilindro cilindro(0.5, 1, 30);
 _cono cono(1, 2, 24);
+_esfera esfera(1, 12, 24);
 
 // _objeto_ply *ply1;
 
@@ -127,7 +128,8 @@ void draw_objects()
 		case ROTACION:
 			// rotacion.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
 			//cilindro.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
-			cono.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			// cono.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
+			esfera.draw(modo, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2);
 			break;
 	}
 }
