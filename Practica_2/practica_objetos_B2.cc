@@ -35,7 +35,7 @@ _objeto_ply  ply;
 _rotacion rotacion; 
 _cilindro cilindro(0.5, 1, 30);
 _cono cono(1, 2, 24);
-_esfera esfera(1, 12, 24);
+_esfera esfera(1, 6, 24);
 
 // _objeto_ply *ply1;
 
@@ -329,7 +329,7 @@ int main(int argc, char *argv[])
 	aux.z = 0;
 	perfil2.push_back(aux);
 
-	rotacion.parametros(perfil2, 12, 2);
+	rotacion.parametros(perfil2, 12, 0);
 
 	// se llama a la inicialización de glut
 	glutInit(&argc, argv);
