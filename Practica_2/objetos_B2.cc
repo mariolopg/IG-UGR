@@ -397,101 +397,101 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
     caras.resize(2 * (num_aux - 1) * num);
 
     // tratamiento de las caras
-    if(tipo != 1)
-    for(int j = 0; j < num - 1; j++){
+    if(tipo != 1){
+        for(int j = 0; j < num - 1; j++){
+            for(int i = 0; i < num_aux - 1; i++){
+                caras[c]._0 = j * num_aux + i;
+                caras[c]._1 = ( j + 1 ) * num_aux + i + 1;
+                caras[c]._2 = ( j + 1 ) * num_aux + i;
+
+                c++;
+
+                caras[c]._0 = j * num_aux + i;
+                caras[c]._1 = j * num_aux + i + 1;
+                caras[c]._2 = ( j + 1 ) * num_aux + i + 1;
+
+                c++;
+            }
+        }
+
+        // Tratamiento para las ultimas caras
         for(int i = 0; i < num_aux - 1; i++){
-            caras[c]._0 = j * num_aux + i;
-            caras[c]._1 = ( j + 1 ) * num_aux + i + 1;
-            caras[c]._2 = ( j + 1 ) * num_aux + i;
+            caras[c]._0 = num * num_aux - num_aux + i;
+            caras[c]._1 = i + 1;
+            caras[c]._2 = i;
 
             c++;
 
-            caras[c]._0 = j * num_aux + i;
-            caras[c]._1 = j * num_aux + i + 1;
-            caras[c]._2 = ( j + 1 ) * num_aux + i + 1;
+            caras[c]._0 = num * num_aux - num_aux + i;
+            caras[c]._1 = num * num_aux - (num_aux - i - 1);
+            caras[c]._2 = i + 1;
 
             c++;
         }
     }
 
-    // Tratamiento para las ultimas caras
-    if(tipo != 1)
-    for(int i = 0; i < num_aux - 1; i++){
-        caras[c]._0 = num * num_aux - num_aux + i;
-        caras[c]._1 = i + 1;
-        caras[c]._2 = i;
+    // tapa superior
+    //Redimiensiono para añadir las nuevas caras y el vértice
+    vertices.resize(vertices.size() + 1);
+    caras.resize(caras.size() + num);
 
-        c++;
+    // Vertice central de tapa superior
+    vertices[vertices.size() - 1].x = 0;
 
-        caras[c]._0 = num * num_aux - num_aux + i;
-        caras[c]._1 = num * num_aux - (num_aux - i - 1);
-        caras[c]._2 = i + 1;
+    if(tipo == 0)
+        vertices[vertices.size() - 1].y = perfil[num_aux - 1].y;
+    if(tipo == 1)
+        vertices[vertices.size() - 1].y = altura;
+    if(tipo == 2)
+        vertices[vertices.size() - 1].y = radio;
+
+    vertices[vertices.size() - 1].z = 0;
+
+    if (fabs(perfil[num_aux - 1].x) > 0.0)
+    {
+        for(int i = 0; i < num - 1; i++){
+            caras[c]._0 = (i + 1) * num_aux - 1;
+            caras[c]._1 = vertices.size() - 1;
+            caras[c]._2 = (i + 2) * num_aux - 1;
+
+            c++;
+        }
+
+        caras[c]._0 = num_aux * num - 1;
+        caras[c]._1 = vertices.size() - 1;
+        caras[c]._2 = num_aux - 1;
 
         c++;
     }
 
-        // tapa superior
-        //Redimiensiono para añadir las nuevas caras y el vértice
-        vertices.resize(vertices.size() + 1);
-        caras.resize(caras.size() + num);
+    // tapa inferior
+    //Redimiensiono para añadir las nuevas caras y el vértice
+    vertices.resize(vertices.size() + 1);
+    caras.resize(caras.size() + num);
 
-        // Vertice central de tapa superior
-        vertices[vertices.size() - 1].x = 0;
+    // Vertice central de tapa inferior
+    vertices[vertices.size() - 1].x = 0;
+    if(tipo == 0 || tipo == 1)
+        vertices[vertices.size() - 1].y = 0;
+    if(tipo == 2)
+        vertices[vertices.size() - 1].y = -radio;
+    vertices[vertices.size() - 1].z = 0;
 
-        if(tipo == 0)
-            vertices[vertices.size() - 1].y = perfil[num_aux - 1].y;
-        if(tipo == 1)
-            vertices[vertices.size() - 1].y = altura;
-        if(tipo == 2)
-            vertices[vertices.size() - 1].y = radio;
-
-        vertices[vertices.size() - 1].z = 0;
-
-        if (fabs(perfil[num_aux - 1].x) > 0.0)
-        {
-            for(int i = 0; i < num - 1; i++){
-                caras[c]._0 = (i + 1) * num_aux - 1;
-                caras[c]._1 = vertices.size() - 1;
-                caras[c]._2 = (i + 2) * num_aux - 1;
-
-                c++;
-            }
-
-            caras[c]._0 = num_aux * num - 1;
+    if (fabs(perfil[0].x) > 0.0)
+    {
+        for(int i = 0; i < num - 1; i++){
+            caras[c]._0 = i * num_aux;
             caras[c]._1 = vertices.size() - 1;
-            caras[c]._2 = num_aux - 1;
+            caras[c]._2 = num_aux * (i + 1);
 
             c++;
         }
 
-        // tapa inferior
-        //Redimiensiono para añadir las nuevas caras y el vértice
-        vertices.resize(vertices.size() + 1);
-        caras.resize(caras.size() + num);
+        caras[c]._0 = 0;
+        caras[c]._1 = vertices.size() - 1;
+        caras[c]._2 = num_aux * (num - 1);
 
-        // Vertice central de tapa inferior
-        vertices[vertices.size() - 1].x = 0;
-        if(tipo == 0 || tipo == 1)
-            vertices[vertices.size() - 1].y = 0;
-        if(tipo == 2)
-            vertices[vertices.size() - 1].y = -radio;
-        vertices[vertices.size() - 1].z = 0;
+        c++;
 
-        if (fabs(perfil[0].x) > 0.0)
-        {
-            for(int i = 0; i < num - 1; i++){
-                caras[c]._0 = i * num_aux;
-                caras[c]._1 = vertices.size() - 1;
-                caras[c]._2 = num_aux * (i + 1);
-
-                c++;
-            }
-
-            caras[c]._0 = 0;
-            caras[c]._1 = vertices.size() - 1;
-            caras[c]._2 = num_aux * (num - 1);
-
-            c++;
-
-        }
+    }
 }
