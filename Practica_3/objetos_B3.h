@@ -123,9 +123,14 @@ class _cilindro: public _rotacion{
 // objeto lego
 //************************************************************************
 
-
 // La cabeza se crea por revolución a partir de un perfil
 class _cabeza_lego: public _rotacion{
 	public:
 		_cabeza_lego();
+};
+
+// El tronco se crea a partir de un objeto de la clase _prisma
+class _tronco_lego: public _rotacion{
+	public:
+		_tronco_lego();
 };

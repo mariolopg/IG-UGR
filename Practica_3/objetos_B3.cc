@@ -343,6 +343,52 @@ _trapecio::_trapecio(float tam)
 }
 
 //*************************************************************************
+// clase cabeza lego
+//*************************************************************************
+
+_cabeza_lego::_cabeza_lego()
+{
+    vector<_vertex3f> cabeza;
+    _vertex3f aux;
+
+    //Mitad inferior
+    aux.x = 0.2; aux.y = -0.5; aux.z = 0; cabeza.push_back(aux);
+    aux.x = 0.2; aux.y = -0.45; cabeza.push_back(aux);
+    aux.x = 0.225; aux.y = -0.43; cabeza.push_back(aux);
+    aux.x = 0.25; aux.y = -0.4; cabeza.push_back(aux);
+    aux.x = 0.3; aux.y = -0.35; cabeza.push_back(aux);
+    aux.x = 0.35; aux.y = -0.3; cabeza.push_back(aux);
+    aux.x = 0.4; aux.y = -0.25; cabeza.push_back(aux);
+    aux.x = 0.45; aux.y = -0.15; cabeza.push_back(aux);
+
+    //Mitad superior
+    aux.x = 0.45; aux.y = 0.15; cabeza.push_back(aux);
+    aux.x = 0.4; aux.y = 0.25; cabeza.push_back(aux);
+    aux.x = 0.35; aux.y = 0.3; cabeza.push_back(aux);
+    aux.x = 0.3; aux.y = 0.35; cabeza.push_back(aux);
+    aux.x = 0.25; aux.y = 0.4; cabeza.push_back(aux);
+    aux.x = 0.225; aux.y = 0.43; cabeza.push_back(aux);
+    aux.x = 0.2; aux.y = 0.45; cabeza.push_back(aux);
+    aux.x = 0.2; aux.y = 0.6; cabeza.push_back(aux);
+
+    //Tubo superior
+    aux.x = 0.15; aux.y = 0.6; cabeza.push_back(aux);
+    aux.x = 0.15; aux.y = 0.4; cabeza.push_back(aux);
+
+    // Puntos para crear el perfil de la cabeza
+    parametros(cabeza, 30, 0);
+}
+
+// *************************************************************************
+// clase tronco lego
+// *************************************************************************
+
+_tronco_lego::_tronco_lego()
+{
+    
+}
+
+//*************************************************************************
 // clase objeto ply
 //*************************************************************************
 
@@ -511,7 +557,7 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
     // Vertice central de tapa inferior
     vertices[vertices.size() - 1].x = 0;
     if(tipo == 0 || tipo == 1)
-        vertices[vertices.size() - 1].y = 0;
+        vertices[vertices.size() - 1].y = vertices[0].y;
     if(tipo == 2)
         vertices[vertices.size() - 1].y = -radio;
     vertices[vertices.size() - 1].z = 0;

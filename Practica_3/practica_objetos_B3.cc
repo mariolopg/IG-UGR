@@ -30,6 +30,7 @@ int Window_x=50,Window_y=50,Window_width=450,Window_high=450;
 
 // objetos
 _cubo cubo;
+_cabeza_lego cabeza;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
 _rotacion rotacion; 
@@ -117,7 +118,8 @@ void draw_objects()
 	switch (t_objeto)
 	{
 		case CUBO:
-			cubo.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
+			// cubo.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
+            cabeza.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
 			break;
 		case PIRAMIDE:
 			piramide.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
