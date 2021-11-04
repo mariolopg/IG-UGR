@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, CILINDRO, CONO, ESFERA} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ARTICULADO} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -33,9 +33,7 @@ _cubo cubo;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
 _rotacion rotacion; 
-_cilindro cilindro(0.5, 1, 30);
-_cono cono(1, 2, 24);
-_esfera esfera(1, 6, 24);
+_tanque tanque;
 
 // _objeto_ply *ply1;
 
@@ -114,30 +112,14 @@ glEnd();
 void draw_objects()
 {
 
-	switch (t_objeto)
-	{
-		case CUBO:
-			cubo.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-			break;
-		case PIRAMIDE:
-			piramide.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-			break;
-		case OBJETO_PLY:
-			ply.draw(modo, 1.0, 0.6, 0.0, 0.0, 1.0, 0.3, 2);
-			break;
-		case ROTACION:
-			rotacion.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-			break;
-		case CILINDRO:
-			cilindro.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-			break;
-		case CONO:
-			cono.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-			break;
-		case ESFERA:
-			esfera.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-			break;
+switch (t_objeto){
+	case CUBO: cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+	case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+        case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
+        case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+        case ARTICULADO: tanque.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);break;
 	}
+
 }
 
 
@@ -194,13 +176,11 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
-	case 'P':t_objeto=PIRAMIDE;break;
-	case 'C':t_objeto=CUBO;break;
-	case 'O':t_objeto=OBJETO_PLY;break;
-	case 'R':t_objeto=ROTACION;break;
-	case 'B':t_objeto=CILINDRO;break;
-	case 'N':t_objeto=CONO;break;
-	case 'M':t_objeto=ESFERA;break;
+        case 'P':t_objeto=PIRAMIDE;break;
+        case 'C':t_objeto=CUBO;break;
+        case 'O':t_objeto=OBJETO_PLY;break;	
+        case 'R':t_objeto=ROTACION;break;
+        case 'A':t_objeto=ARTICULADO;break;
 	}
 glutPostRedisplay();
 }
@@ -215,32 +195,29 @@ glutPostRedisplay();
 
 //***************************************************************************
 
-void special_key(int Tecla1, int x, int y)
+void special_key(int Tecla1,int x,int y)
 {
 
-	switch (Tecla1)
-	{
-		case GLUT_KEY_LEFT:
-			Observer_angle_y--;
-			break;
-		case GLUT_KEY_RIGHT:
-			Observer_angle_y++;
-			break;
-		case GLUT_KEY_UP:
-			Observer_angle_x--;
-			break;
-		case GLUT_KEY_DOWN:
-			Observer_angle_x++;
-			break;
-		case GLUT_KEY_PAGE_UP:
-			Observer_distance *= 1.2;
-			break;
-		case GLUT_KEY_PAGE_DOWN:
-			Observer_distance /= 1.2;
-			break;
+switch (Tecla1){
+	case GLUT_KEY_LEFT:Observer_angle_y--;break;
+	case GLUT_KEY_RIGHT:Observer_angle_y++;break;
+	case GLUT_KEY_UP:Observer_angle_x--;break;
+	case GLUT_KEY_DOWN:Observer_angle_x++;break;
+	case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
+	case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+        case GLUT_KEY_F1:tanque.giro_tubo+=1;
+                         if (tanque.giro_tubo>tanque.giro_tubo_max) tanque.giro_tubo=tanque.giro_tubo_max;
+                         break;
+        case GLUT_KEY_F2:tanque.giro_tubo-=1;
+                         if (tanque.giro_tubo<tanque.giro_tubo_min) tanque.giro_tubo=tanque.giro_tubo_min;
+                         break;break;
+        case GLUT_KEY_F3:tanque.giro_torreta+=5;break;
+        case GLUT_KEY_F4:tanque.giro_torreta-=5;break;
 	}
-	glutPostRedisplay();
+glutPostRedisplay();
 }
+
+
 
 //***************************************************************************
 // Funcion de incializacion
@@ -249,26 +226,30 @@ void special_key(int Tecla1, int x, int y)
 void initialize(void)
 {
 
-    // se inicalizan la ventana y los planos de corte
-    Size_x = 0.5;
-    Size_y = 0.5;
-    Front_plane = 1;
-    Back_plane = 1000;
+// se inicalizan la ventana y los planos de corte
+Size_x=0.5;
+Size_y=0.5;
+Front_plane=1;
+Back_plane=1000;
 
-    // se incia la posicion del observador, en el eje z
-    Observer_distance = 4 * Front_plane;
-    Observer_angle_x = 0;
-    Observer_angle_y = 0;
+// se incia la posicion del observador, en el eje z
+Observer_distance=4*Front_plane;
+Observer_angle_x=0;
+Observer_angle_y=0;
 
-    // se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
-    // blanco=(1,1,1,1) rojo=(1,0,0,1), ...
-    glClearColor(1, 1, 1, 1);
+// se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
+// blanco=(1,1,1,1) rojo=(1,0,0,1), ...
+glClearColor(1,1,1,1);
 
-    // se habilita el z-bufer
-    glEnable(GL_DEPTH_TEST);
-    change_projection();
-    glViewport(0, 0, Window_width, Window_high);
+// se habilita el z-bufer
+glEnable(GL_DEPTH_TEST);
+change_projection();
+glViewport(0,0,Window_width,Window_high);
+
+
+
 }
+
 
 //***************************************************************************
 // Programa principal
@@ -277,102 +258,82 @@ void initialize(void)
 // bucle de eventos
 //***************************************************************************
 
-int main(int argc, char *argv[])
+
+int main(int argc, char **argv)
 {
+ 
 
-    // perfil
+// creación del objeto ply
 
-    vector<_vertex3f> perfil2;
-    _vertex3f aux;
+ply.parametros(argv[1]);
 
-    // Perfil original
-    // aux.x = 1.2;
-    // aux.y = -1.0;
-    // aux.z = 0.0;
-    // perfil2.push_back(aux);
-    // aux.x = 0.6;
-    // aux.y = 0.0;
-    // aux.z = 0.0;
-    // perfil2.push_back(aux);
-    // aux.x = 1.2;
-    // aux.y = 1.2;
-    // aux.z = 0.0;
-    // perfil2.push_back(aux);
-    // aux.x = 1.8;
-    // aux.y = 1.8;
-    // aux.z = 0.0;
-    // perfil2.push_back(aux);
 
-    //Perfil Mario
-    aux.x = 2;
-    aux.y = 0;
-    aux.z = 0;
-    perfil2.push_back(aux);
-    aux.x = 3;
-    aux.y = 1;
-    aux.z = 0;
-    perfil2.push_back(aux);
-    aux.x = 3;
-    aux.y = 1.25;
-    aux.z = 0;
-    perfil2.push_back(aux);
-    aux.x = 2;
-    aux.y = 2.5;
-    aux.z = 0;
-    perfil2.push_back(aux);
-    aux.x = 1;
-    aux.y = 3;
-    aux.z = 0;
-    perfil2.push_back(aux);
-    aux.x = 2;
-    aux.y = 4;
-    aux.z = 0;
-    perfil2.push_back(aux);
+// perfil 
 
-    rotacion.parametros(perfil2, 12, 0);
+vector<_vertex3f> perfil2;
+_vertex3f aux;
+aux.x=1.0;aux.y=-1.4;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=1.0;aux.y=-1.1;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.5;aux.y=-0.7;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.4;aux.y=-0.4;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.4;aux.y=0.5;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.5;aux.y=0.6;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.3;aux.y=0.6;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.5;aux.y=0.8;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.55;aux.y=1.0;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.5;aux.y=1.2;aux.z=0.0;
+perfil2.push_back(aux);
+aux.x=0.3;aux.y=1.4;aux.z=0.0;
+perfil2.push_back(aux);
+rotacion.parametros(perfil2,6,1);
 
-    // se llama a la inicialización de glut
-    glutInit(&argc, argv);
 
-    // se indica las caracteristicas que se desean para la visualización con OpenGL
-    // Las posibilidades son:
-    // GLUT_SIMPLE -> memoria de imagen simple
-    // GLUT_DOUBLE -> memoria de imagen doble
-    // GLUT_INDEX -> memoria de imagen con color indizado
-    // GLUT_RGB -> memoria de imagen con componentes rojo, verde y azul para cada pixel
-    // GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
-    // GLUT_DEPTH -> memoria de profundidad o z-bufer
-    // GLUT_STENCIL -> memoria de estarcido_rotation Rotation;
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+// se llama a la inicialización de glut
+glutInit(&argc, argv);
 
-    // posicion de la esquina inferior izquierdad de la ventana
-    glutInitWindowPosition(Window_x, Window_y);
+// se indica las caracteristicas que se desean para la visualización con OpenGL
+// Las posibilidades son:
+// GLUT_SIMPLE -> memoria de imagen simple
+// GLUT_DOUBLE -> memoria de imagen doble
+// GLUT_INDEX -> memoria de imagen con color indizado
+// GLUT_RGB -> memoria de imagen con componentes rojo, verde y azul para cada pixel
+// GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
+// GLUT_DEPTH -> memoria de profundidad o z-bufer
+// GLUT_STENCIL -> memoria de estarcido_rotation Rotation;
+glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    // tamaño de la ventana (ancho y alto)
-    glutInitWindowSize(Window_width, Window_high);
+// posicion de la esquina inferior izquierdad de la ventana
+glutInitWindowPosition(Window_x,Window_y);
 
-    // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
-    // al bucle de eventos)
-    glutCreateWindow("PRACTICA - 2");
+// tamaño de la ventana (ancho y alto)
+glutInitWindowSize(Window_width,Window_high);
 
-    // asignación de la funcion llamada "dibujar" al evento de dibujo
-    glutDisplayFunc(draw);
-    // asignación de la funcion llamada "change_window_size" al evento correspondiente
-    glutReshapeFunc(change_window_size);
-    // asignación de la funcion llamada "normal_key" al evento correspondiente
-    glutKeyboardFunc(normal_key);
-    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
-    glutSpecialFunc(special_key);
+// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
+// al bucle de eventos)
+glutCreateWindow("PRACTICA - 2");
 
-    // funcion de inicialización
-    initialize();
+// asignación de la funcion llamada "dibujar" al evento de dibujo
+glutDisplayFunc(draw);
+// asignación de la funcion llamada "change_window_size" al evento correspondiente
+glutReshapeFunc(change_window_size);
+// asignación de la funcion llamada "normal_key" al evento correspondiente
+glutKeyboardFunc(normal_key);
+// asignación de la funcion llamada "tecla_Especial" al evento correspondiente
+glutSpecialFunc(special_key);
 
-    // creación del objeto ply
-    ply.parametros(argv[1]);
+// funcion de inicialización
+initialize();
 
-    //ply1 = new _objeto_ply(argv[1]);
-
-    // inicio del bucle de eventos
-    glutMainLoop();
-    return 0;
+// inicio del bucle de eventos
+glutMainLoop();
+return 0;
 }

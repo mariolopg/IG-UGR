@@ -6,7 +6,9 @@
 #include <GL/gl.h>
 #include "vertex.h"
 #include <stdlib.h>
+#include "file_ply_stl.hpp"
 
+using namespace std;
 
 const float AXIS_SIZE=5000;
 typedef enum{POINTS,EDGES,SOLID_CHESS,SOLID} _modo;
@@ -55,16 +57,6 @@ public:
 	_cubo(float tam=0.5);
 };
 
-//*************************************************************************
-// clase prisma trapezoidal
-//*************************************************************************
-
-class _trapecio: public _triangulos3D
-{
-public:
-	_trapecio(float tam = 1);
-};
-
 
 //*************************************************************************
 // clase piramide
@@ -95,37 +87,77 @@ int   parametros(char *archivo);
 
 class _rotacion: public _triangulos3D
 {
-	public:
-		_rotacion();
-		void  parametros(vector<_vertex3f> perfil1, int num1, int tipo); //Tipos --> 0: cilindro / 1: cono / 2: esfera
+public:
+       _rotacion();
+void  parametros(vector<_vertex3f> perfil1, int num1, int tapas);
 
-		vector<_vertex3f> perfil; 
-		int num;
-};
-
-class _esfera: public _rotacion{
-	public:
-		_esfera(float radio, int n, int m);
-};
-
-class _cono: public _rotacion{
-	public:
-		_cono(float radio, int altura, int m);
-};
-
-class _cilindro: public _rotacion{
-	public:
-		_cilindro(float radio, int altura, int m);
+vector<_vertex3f> perfil; 
+int num;
 };
 
 
 //************************************************************************
-// objeto lego
+// objeto articulado: tanque
 //************************************************************************
 
+class _chasis: public _triangulos3D
+{
+public:
+       _chasis();
+void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 
-// La cabeza se crea por revolución a partir de un perfil
-class _cabeza_lego: public _rotacion{
-	public:
-		_cabeza_lego();
+float altura;
+
+protected:
+_rotacion  rodamiento;
+_cubo  base;
 };
+
+//************************************************************************
+
+class _torreta: public _triangulos3D
+{
+public:
+       _torreta();
+void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+
+float altura;
+float anchura;
+
+protected:
+_cubo  base;
+_piramide parte_trasera;
+};
+
+//************************************************************************
+
+class _tubo: public _triangulos3D
+{
+public:
+       _tubo();
+void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+
+protected:
+_rotacion tubo_abierto; // caña del cañón
+};
+
+//************************************************************************
+
+class _tanque: public _triangulos3D
+{
+public:
+       _tanque();
+void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+
+float giro_tubo;
+float giro_torreta;
+
+float giro_tubo_min;
+float giro_tubo_max;
+
+protected:
+_chasis  chasis;
+_torreta  torreta;
+_tubo     tubo;
+};
+

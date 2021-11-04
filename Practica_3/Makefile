@@ -1,59 +1,21 @@
-# fichero Makefile
-#
-# nombre del fichero ejecutable
-#
-TARGETS= practica_objetos_B3
+.PHONY: x clean tar
 
-# banderas para el compilador (C y C++). Se indican los directorios donde se puenden
-# encontrar ficheros para incluir mediante la opcion -I
-# la opcion -g sirve para permitir la depuración
-#
-CFLAGS=    -g -DXWINDOWS -DSHM -I/usr/include -I.
-CXXFLAGS=  -g -DXWINDOWS -DSHM -I/usr/include -I.
+EJECUTABLE= practica_objetos_B3
 
-# banderas pra el enlazador
-# Se indica directorios donde encontrar las funciontecas con -L. Usando -l seguido del
-# nombre se indica la funcionteca que se desea enlazar.
-#
-LDFLAGS=  -lGL -lGLU -lglut -lsupc++ -lm -lc -lstdc++ -lpthread -L/usr/lib/nvidia-331
+MODULOS:= practica_objetos_B3.o\
+         objetos_B3.o\
+         file_ply_stl.o\
+      
+LIBS:= -L/usr/lib -framework OpenGL -framework GLUT -lm -lc -lstdc++ -lpthread
+CPPFLAGS:= -Wall -fmax-errors=2 -g
 
-# definicion del compilador
-#
-CC = g++
+CC= g++
 
-# orden que sera ejecutada por defecto
-#
-default : $(TARGETS)
+x: $(EJECUTABLE)
+	./$(EJECUTABLE) beethoven
 
-# regla de ejecucion
-#
-$(TARGETS) : file_ply_stl.o objetos_B3.o practica_objetos_B3.o
-	$(CC) -o $@ $(CXXFLAGS) file_ply_stl.o objetos_B3.o practica_objetos_B3.o $(LDFLAGS)
+$(EJECUTABLE): $(MODULOS)	
+	$(CC) -o $(EJECUTABLE) $(LDFLAGS) $(MODULOS) $(LIBS) 
 
-#
-#
 clean:
-	rm -f *.o
-	rm -f $(TARGETS)
-
-#
-#
-redo:
-	touch *.cc
-	make
-
-#
-#
-superclean:
-	rm -f *.o
-	rm *~
-	rm -f $(TARGETS)
-
-#
-#
-tgz:
-	rm -f *.o
-	rm *~
-	rm -f $(TARGETS)
-	tar -zcvf $(TARGETS).tgz *
-
+	rm -rf *.o $(EJECUTABLE)
