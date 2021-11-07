@@ -162,6 +162,17 @@ class _pelvis_lego: public _rotacion{
 		_cilindro *articulacion_piernas;
 };
 
+class _pierna_lego: public _rotacion{
+	public:
+		_pierna_lego();
+		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+
+	protected:
+		_cilindro *cuadriceps;
+		_cubo *gemelo;
+		_cubo *pie;
+};
+
 class _lego: public _rotacion{
 	public:
 		_lego();
@@ -172,4 +183,6 @@ class _lego: public _rotacion{
 		_brazo_lego brazo_izquierdo;
 		_brazo_lego brazo_derecho;
 		_pelvis_lego pelvis;
+		_pierna_lego pierna_izquierda;
+		_pierna_lego pierna_derecha;
 };
