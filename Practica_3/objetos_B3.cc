@@ -131,30 +131,30 @@ _cubo::_cubo(float tam)
 {
     //vertices
     vertices.resize(8);
-    vertices[0].x = 0;
-    vertices[0].y = 0;
-    vertices[0].z = 0;
-    vertices[1].x = 0;
-    vertices[1].y = 0;
-    vertices[1].z = tam;
-    vertices[2].x = tam;
-    vertices[2].y = 0;
-    vertices[2].z = tam;
-    vertices[3].x = tam;
-    vertices[3].y = 0;
-    vertices[3].z = 0;
-    vertices[4].x = tam;
-    vertices[4].y = tam;
-    vertices[4].z = 0;
-    vertices[5].x = 0;
-    vertices[5].y = tam;
-    vertices[5].z = 0;
-    vertices[6].x = 0;
-    vertices[6].y = tam;
-    vertices[6].z = tam;
-    vertices[7].x = tam;
-    vertices[7].y = tam;
-    vertices[7].z = tam;
+    vertices[0].x = -tam/2;
+    vertices[0].y = -tam/2;
+    vertices[0].z = -tam/2;
+    vertices[1].x = -tam/2;
+    vertices[1].y = -tam/2;
+    vertices[1].z = tam/2;
+    vertices[2].x = tam/2;
+    vertices[2].y = -tam/2;
+    vertices[2].z = tam/2;
+    vertices[3].x = tam/2;
+    vertices[3].y = -tam/2;
+    vertices[3].z = -tam/2;
+    vertices[4].x = tam/2;
+    vertices[4].y = tam/2;
+    vertices[4].z = -tam/2;
+    vertices[5].x = -tam/2;
+    vertices[5].y = tam/2;
+    vertices[5].z = -tam/2;
+    vertices[6].x = -tam/2;
+    vertices[6].y = tam/2;
+    vertices[6].z = tam/2;
+    vertices[7].x = tam/2;
+    vertices[7].y = tam/2;
+    vertices[7].z = tam/2;
 
     // triangulos
     caras.resize(12);
@@ -252,11 +252,11 @@ _cilindro::_cilindro(float radio, int altura, int m)
     _vertex3f aux;
 
         aux.x = radio;
-        aux.y = 0;
+        aux.y = - altura / 2.0;
         aux.z = 0;
         perfil1.push_back(aux);
 
-        aux.y = altura;
+        aux.y = altura / 2.0;
         perfil1.push_back(aux);
 
     parametros(perfil1, m, 0);
@@ -311,15 +311,15 @@ _trapecio::_trapecio(float tam)
 {
     //vertices
     vertices.resize(8);
-    vertices[0].x = -tam/2*0.5; vertices[0].y = tam/2; vertices[0].z = tam/2;
+    vertices[0].x = -tam/2*0.7; vertices[0].y = tam/2; vertices[0].z = tam/2;
     vertices[1].x = -tam/2; vertices[1].y = -tam/2; vertices[1].z = tam/2;
     vertices[2].x = tam/2; vertices[2].y = -tam/2; vertices[2].z = tam/2;
-    vertices[3].x = tam/2 * 0.5; vertices[3].y = tam/2; vertices[3].z = tam/2;
+    vertices[3].x = tam/2 * 0.7; vertices[3].y = tam/2; vertices[3].z = tam/2;
 
-    vertices[4].x = -tam/2 * 0.5; vertices[4].y = tam/2; vertices[4].z = -tam/2;
+    vertices[4].x = -tam/2 * 0.7; vertices[4].y = tam/2; vertices[4].z = -tam/2;
     vertices[5].x = -tam/2; vertices[5].y = -tam/2; vertices[5].z = -tam/2;
     vertices[6].x = tam/2; vertices[6].y = -tam/2; vertices[6].z = -tam/2;
-    vertices[7].x = tam/2 * 0.5; vertices[7].y = tam/2; vertices[7].z = -tam/2;
+    vertices[7].x = tam/2 * 0.7; vertices[7].y = tam/2; vertices[7].z = -tam/2;
 
     // caras
     caras.resize(12);
@@ -383,9 +383,82 @@ _cabeza_lego::_cabeza_lego()
 // clase tronco lego
 // *************************************************************************
 
-_tronco_lego::_tronco_lego()
-{
-    
+_tronco_lego::_tronco_lego(){}
+
+void _tronco_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
+    glPushMatrix();
+    glScalef(2, 1.5, 0.5);
+    tronco.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+// *************************************************************************
+// clase brazo lego
+// *************************************************************************
+
+_brazo_lego::_brazo_lego(){
+    articulacion = new _cilindro(0.5, 1, 24);
+    hombro = new _esfera(1, 6, 24);
+    antebrazo = new _cilindro(0.5, 1, 24);
+}
+
+void _brazo_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
+    //Articulacion
+    glPushMatrix();
+    glTranslatef(0.1, 0.5, 0);
+    glRotatef(90, 0, 0, 1);
+    glScalef(0.3, 0.3, 0.3);
+    articulacion->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Hombro
+    glPushMatrix();
+    glTranslatef(-0.05, 0.5, 0);
+    glRotatef(-10, 0, 0, 1);
+    glScalef(0.15, 0.15, 0.15);
+    hombro->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Antebrazo
+    glPushMatrix();
+    glTranslatef(-0.15, -0.1, 0);
+    glRotatef(-10, 0, 0, 1);
+    glScalef(0.3, 1.2, 0.3);
+    antebrazo->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+// *************************************************************************
+// clases lego
+// *************************************************************************
+
+_lego::_lego(){}
+
+void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
+    //Cabeza
+    glPushMatrix();
+    glScalef(1.1, 1.1, 1.1);
+    glTranslatef(0, 1.17, 0);
+    cabeza.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Tronco
+    glPushMatrix();
+    tronco.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Brazo izquierdo
+    glPushMatrix();
+    glTranslatef(-0.9, 0, 0);
+    brazo_izquierdo.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Brazo derecho
+    glPushMatrix();
+    glTranslatef(0.9, 0, 0);
+    glRotatef(180, 0, 1, 0);
+    brazo_derecho.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
 }
 
 //*************************************************************************

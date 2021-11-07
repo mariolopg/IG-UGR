@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, CILINDRO, CONO, ESFERA} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, CILINDRO, CONO, ESFERA, LEGO, PRUEBA} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -30,13 +30,14 @@ int Window_x=50,Window_y=50,Window_width=450,Window_high=450;
 
 // objetos
 _cubo cubo;
-_cabeza_lego cabeza;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
 _rotacion rotacion; 
 _cilindro cilindro(0.5, 1, 30);
-_cono cono(1, 2, 24);
+_cono cono(0.5, 1, 24);
 _esfera esfera(1, 6, 24);
+_lego lego;
+_brazo_lego brazo;
 
 // _objeto_ply *ply1;
 
@@ -118,8 +119,7 @@ void draw_objects()
 	switch (t_objeto)
 	{
 		case CUBO:
-			// cubo.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
-            cabeza.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
+			cubo.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
 			break;
 		case PIRAMIDE:
 			piramide.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
@@ -139,6 +139,12 @@ void draw_objects()
 		case ESFERA:
 			esfera.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
 			break;
+        case LEGO:
+            lego.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
+            break;
+        case PRUEBA:
+            brazo.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
+            break;
 	}
 }
 
@@ -203,6 +209,8 @@ switch (toupper(Tecla1)){
 	case 'B':t_objeto=CILINDRO;break;
 	case 'N':t_objeto=CONO;break;
 	case 'M':t_objeto=ESFERA;break;
+    case 'L':t_objeto=LEGO;break;
+    case 'Z':t_objeto=PRUEBA;break;
 	}
 glutPostRedisplay();
 }
