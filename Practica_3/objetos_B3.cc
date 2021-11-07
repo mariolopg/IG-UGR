@@ -398,7 +398,7 @@ void _tronco_lego::draw(_modo modo, float r1, float g1, float b1, float r2, floa
 
 _brazo_lego::_brazo_lego(){
     articulacion = new _cilindro(0.5, 1, 24);
-    hombro = new _esfera(1, 6, 24);
+    hombro = new _esfera(1, 24, 24);
     antebrazo = new _cilindro(0.5, 1, 24);
 }
 
@@ -425,6 +425,41 @@ void _brazo_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float
     glRotatef(-10, 0, 0, 1);
     glScalef(0.3, 1.2, 0.3);
     antebrazo->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+// *************************************************************************
+// clase pelvis lego
+// *************************************************************************
+
+_pelvis_lego::_pelvis_lego(){
+    cintura = new _cubo(1);
+    ingle = new _cilindro(0.5, 1, 24);
+    articulacion_piernas = new _cilindro(0.5, 1, 24);
+}
+
+void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
+
+    //Ingle
+    glPushMatrix();
+    glTranslatef(0, -0.25, 0);
+    glRotatef(90, 0, 0, 1);
+    glScalef(0.4, 0.2, 0.4);
+    ingle->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Articulacion piernas
+    glPushMatrix();
+    glTranslatef(0, -0.25, 0);
+    glRotatef(90, 0, 0, 1);
+    glScalef(0.2, 0.3, 0.2);
+    articulacion_piernas->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Cintura
+    glPushMatrix();
+    glScalef(2, 0.25, 0.5);
+    cintura->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
     glPopMatrix();
 }
 
@@ -458,6 +493,12 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
     glTranslatef(0.9, 0, 0);
     glRotatef(180, 0, 1, 0);
     brazo_derecho.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+
+    //Pelvis
+    glPushMatrix();
+    glTranslatef(0, -0.875, 0);
+    pelvis.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
     glPopMatrix();
 }
 

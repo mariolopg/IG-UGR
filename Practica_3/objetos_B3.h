@@ -154,10 +154,12 @@ class _brazo_lego: public _rotacion{
 class _pelvis_lego: public _rotacion{
 	public:
 		_pelvis_lego();
+		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 
 	protected:
 		_cubo *cintura;
 		_cilindro *ingle;
+		_cilindro *articulacion_piernas;
 };
 
 class _lego: public _rotacion{
@@ -169,4 +171,5 @@ class _lego: public _rotacion{
 		_tronco_lego tronco;
 		_brazo_lego brazo_izquierdo;
 		_brazo_lego brazo_derecho;
+		_pelvis_lego pelvis;
 };
