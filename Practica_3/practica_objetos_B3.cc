@@ -37,7 +37,7 @@ _cilindro cilindro(0.5, 1, 30);
 _cono cono(0.5, 1, 24);
 _esfera esfera(1, 6, 24);
 _lego lego;
-_pierna_lego prueba;
+_ojo_lego prueba;
 
 // _objeto_ply *ply1;
 

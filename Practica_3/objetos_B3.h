@@ -129,6 +129,16 @@ class _cabeza_lego: public _rotacion{
 		_cabeza_lego();
 };
 
+class _ojo_lego: public _rotacion{
+	public:
+		_ojo_lego();
+		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+
+	protected:
+		_esfera *ojo;
+		_esfera *pupila;
+};
+
 // El tronco se crea a partir de un objeto de la clase _prisma
 class _tronco_lego: public _rotacion{
 	public:
@@ -149,6 +159,18 @@ class _brazo_lego: public _rotacion{
 		_cilindro *articulacion;
 		_esfera *hombro;
 		_cilindro *antebrazo;
+};
+
+class _mano_lego: public _rotacion{
+	public:
+		_mano_lego();
+		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+
+	protected:
+		_cilindro *munheca;
+		_cubo *palma;
+		_cubo *dedos_izq;
+		_cubo *dedos_der;
 };
 
 class _pelvis_lego: public _rotacion{
@@ -179,9 +201,13 @@ class _lego: public _rotacion{
 		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 	protected:
 		_cabeza_lego cabeza;
+		_ojo_lego ojo_izquierdo;
+		_ojo_lego ojo_derecho;
 		_tronco_lego tronco;
 		_brazo_lego brazo_izquierdo;
+		_mano_lego mano_izquierda;
 		_brazo_lego brazo_derecho;
+		_mano_lego mano_derecha;
 		_pelvis_lego pelvis;
 		_pierna_lego pierna_izquierda;
 		_pierna_lego pierna_derecha;
