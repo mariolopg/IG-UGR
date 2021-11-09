@@ -518,7 +518,7 @@ void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, floa
     //Cintura
     glPushMatrix();
     glScalef(1.6, 0.25, 0.5);
-    cintura->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    cintura->draw(modo, 153.0/255, 102.0/255, 51.0/255, r2, g2, b2, grosor);
     glPopMatrix();
 }
 
