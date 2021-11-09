@@ -37,7 +37,7 @@ _cilindro cilindro(0.5, 1, 30);
 _cono cono(0.5, 1, 24);
 _esfera esfera(1, 6, 24);
 _lego lego;
-_ojo_lego prueba;
+_brazo_lego prueba;
 
 // _objeto_ply *ply1;
 
@@ -248,6 +248,65 @@ void special_key(int Tecla1, int x, int y)
 		case GLUT_KEY_PAGE_DOWN:
 			Observer_distance /= 1.2;
 			break;
+        //Mover cabeza a la izquierda
+        case GLUT_KEY_F1:
+            lego.giro_cabeza -= 1.0;
+            if(lego.giro_cabeza < lego.giro_cabeza_min)
+                lego.giro_cabeza = lego.giro_cabeza_min;
+            break;
+        //Mover cabeza a la izquierda
+        case GLUT_KEY_F2:
+            lego.giro_cabeza += 1.0;
+            if(lego.giro_cabeza > lego.giro_cabeza_max)
+                lego.giro_cabeza = lego.giro_cabeza_max;
+            break;
+        //Mover brazo izquierdo hacia atrás
+        case GLUT_KEY_F3:
+            lego.giro_brazo_izq += 1.0;
+            if(lego.giro_brazo_izq > lego.giro_brazo_min)
+                lego.giro_brazo_izq = lego.giro_brazo_min;
+            break;
+        //Mover brazo izquierdo hacia delante
+        case GLUT_KEY_F4:
+            lego.giro_brazo_izq -= 1.0;
+            if(lego.giro_brazo_izq < lego.giro_brazo_max)
+                lego.giro_brazo_izq = lego.giro_brazo_max;
+            break;
+        //Mover brazo derecho hacia atrás 
+        case GLUT_KEY_F5:
+            lego.giro_brazo_der += 1.0;
+            if(lego.giro_brazo_der > lego.giro_brazo_min)
+                lego.giro_brazo_der = lego.giro_brazo_min;
+            break;
+        //Mover brazo derecho hacia delante 
+        case GLUT_KEY_F6:
+            lego.giro_brazo_der -= 1.0;
+            if(lego.giro_brazo_der < lego.giro_brazo_max)
+                lego.giro_brazo_der = lego.giro_brazo_max;
+            break;
+        //Mover pierna izquierda derecha hacia atras
+        case GLUT_KEY_F7:
+            lego.giro_pierna_izq += 1.0;
+            if(lego.giro_pierna_izq > lego.giro_pierna_min)
+                lego.giro_pierna_izq = lego.giro_pierna_min;
+            break;
+        //Mover pierna izquierda hacia delante
+        case GLUT_KEY_F8:
+            lego.giro_pierna_izq -= 1.0;
+            if(lego.giro_pierna_izq < lego.giro_pierna_max)
+                lego.giro_pierna_izq = lego.giro_pierna_max;
+            break;
+        //Mover pierna derecha derecha hacia atras
+        case GLUT_KEY_F9:
+            lego.giro_pierna_der += 1.0;
+            if(lego.giro_pierna_der > lego.giro_pierna_min)
+                lego.giro_pierna_der = lego.giro_pierna_min;
+            break;
+        case GLUT_KEY_F10:
+            lego.giro_pierna_der -= 1.0;
+            if(lego.giro_pierna_der < lego.giro_pierna_max)
+                lego.giro_pierna_der = lego.giro_pierna_max;
+            break;
 	}
 	glutPostRedisplay();
 }

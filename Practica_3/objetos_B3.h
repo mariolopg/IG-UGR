@@ -198,6 +198,24 @@ class _lego: public _rotacion{
 	public:
 		_lego();
 		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+	
+		//Giro cabeza
+		float giro_cabeza;
+		float giro_cabeza_min;
+		float giro_cabeza_max;
+
+		//Giro brazos
+		float giro_brazo_izq;
+		float giro_brazo_der;
+		float giro_brazo_min;
+		float giro_brazo_max;
+
+		//Giro piernas
+		float giro_pierna_izq;
+		float giro_pierna_der;
+		float giro_pierna_min;
+		float giro_pierna_max;
+	
 	protected:
 		_cabeza_lego cabeza;
 		_ojo_lego ojo_izquierdo;
@@ -210,4 +228,6 @@ class _lego: public _rotacion{
 		_pelvis_lego pelvis;
 		_pierna_lego pierna_izquierda;
 		_pierna_lego pierna_derecha;
+
+
 };
