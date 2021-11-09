@@ -384,17 +384,10 @@ _cabeza_lego::_cabeza_lego()
 // *************************************************************************
 
 _ojo_lego::_ojo_lego(){
-    ojo = new _esfera(1, 24, 24);
     pupila = new _esfera(1, 24, 24);
 }
 
 void _ojo_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
-    //ojo
-    glPushMatrix();
-    glScalef(0.3, 0.3, 0.3);
-    ojo->draw(modo, 1, 1, 1, r2, g2, b2, grosor);
-    glPopMatrix();
-
     //pupila
     glPushMatrix();
     glTranslatef(0, 0, 0.2);
@@ -579,17 +572,15 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
 
     //Ojo izquierdo
     glPushMatrix();
-    glTranslatef(-0.15, 1.2, 0.5);
+    glTranslatef(-0.15, 1.2, 0.43);
     glScalef(0.2, 0.2, 0.2);
-    glRotatef(20, 1, 0, 0);
     ojo_izquierdo.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
     glPopMatrix();
 
     //Ojo derecho
     glPushMatrix();
-    glTranslatef(0.15, 1.2, 0.5);
+    glTranslatef(0.15, 1.2, 0.43);
     glScalef(0.2, 0.2, 0.2);
-    glRotatef(20, 1, 0, 0);
     ojo_derecho.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
     glPopMatrix();
 

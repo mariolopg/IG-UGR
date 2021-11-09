@@ -135,7 +135,6 @@ class _ojo_lego: public _rotacion{
 		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 
 	protected:
-		_esfera *ojo;
 		_esfera *pupila;
 };
 

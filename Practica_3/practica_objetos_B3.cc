@@ -272,7 +272,7 @@ void initialize(void)
 
     // se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
     // blanco=(1,1,1,1) rojo=(1,0,0,1), ...
-    glClearColor(1, 1, 1, 1);
+    glClearColor(102.0/255, 153.0/255, 1, 1);
 
     // se habilita el z-bufer
     glEnable(GL_DEPTH_TEST);
