@@ -202,7 +202,8 @@ switch (toupper(Tecla1)){
 	case '4':modo=SOLID_CHESS;break;
     case '5':mov = 3; break;
     case '6':mov = 0.5; break;
-    case '7':mov = 0;
+    case '7':mov = 0; break;
+    case '8': 
         lego.giro_brazo_izq = 0;
         lego.giro_brazo_der = 0;
         lego.giro_pierna_izq = 0;
