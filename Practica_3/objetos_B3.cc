@@ -516,8 +516,8 @@ void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, floa
 
     //Cintura
     glPushMatrix();
-    glScalef(1.6, 0.25, 0.5);
-    cintura->draw(modo, 153.0/255, 102.0/255, 51.0/255, r2, g2, b2, grosor);
+    glScalef(1.62, 0.25, 0.5);
+    cintura->draw(modo, 153.0/255, 102.0/255, 51.0/255, 153.0/255 - 0.1, 102.0/255 - 0.1, 51.0/255 - 0.1, grosor);
     glPopMatrix();
 }
 
@@ -587,19 +587,19 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
         glPushMatrix();
         glTranslatef(0, 1.3, 0);
         glScalef(1.1, 1.1, 1.1);
-        cabeza.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
+        cabeza.draw(modo, 1, 1, 0, 0.9, 0.9, 0, grosor);
         glPopMatrix();
 
         //Ojo izquierdo
         glPushMatrix();
         glTranslatef(-0.15, 1.33, 0.5);
-        ojo_izquierdo.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
+        ojo_izquierdo.draw(modo, 0, 0, 0, 0, 0, 0, grosor);
         glPopMatrix();
 
         //Ojo derecho
         glPushMatrix();
         glTranslatef(0.15, 1.33, 0.5);
-        ojo_derecho.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
+        ojo_derecho.draw(modo, 0, 0, 0, 0, 0, 0, grosor);
         glPopMatrix();
     glPopMatrix();
 
@@ -623,7 +623,7 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
         glPushMatrix();
         glTranslatef(-1.02, -0.73, 0);
         glRotatef(-10, 0, 0, 1);
-        mano_izquierda.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
+        mano_izquierda.draw(modo, 1, 1, 0, 0.9, 0.9, 0, grosor);
         glPopMatrix();
     glPopMatrix();
     
@@ -636,7 +636,7 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
         glPushMatrix();
         glTranslatef(0.75, 0, 0);
         glRotatef(180, 0, 1, 0);
-        brazo_derecho.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+        brazo_derecho.draw(modo, r1, g1, b1, r1, g2, b2, grosor);
         glPopMatrix();
 
         //Mano derecha
@@ -644,28 +644,28 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
         glTranslatef(1.02, -0.73, 0);
         glRotatef(180, 0, 1, 0);
         glRotatef(-10, 0, 0, 1);
-        mano_derecha.draw(modo, 1, 1, 0, r2, g2, b2, grosor);
+        mano_derecha.draw(modo, 1, 1, 0, 0.9, 0.9, 0, grosor);
         glPopMatrix();
     glPopMatrix();
 
     //Pelvis
     glPushMatrix();
     glTranslatef(0, -0.875, 0);
-    pelvis.draw(modo, 51/255, 102/255, 1, r2, g2, b2, grosor);
+    pelvis.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
     glPopMatrix();
 
     //Pierna izquierda
     glPushMatrix();
     glTranslatef(-0.45, -1.125, 0);
     glRotatef(giro_pierna_izq, 1, 0, 0);
-    pierna_izquierda.draw(modo, 51/255, 102/255, 1, r2, g2, b2, grosor);
+    pierna_izquierda.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
     glPopMatrix();
 
     //Pierna derecha
     glPushMatrix();
     glTranslatef(0.45, -1.125, 0);
     glRotatef(giro_pierna_der, 1, 0, 0);
-    pierna_derecha.draw(modo, 51/255, 102/255, 1, r2, g2, b2, grosor);
+    pierna_derecha.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
     glPopMatrix();
 }
 

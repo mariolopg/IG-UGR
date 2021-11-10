@@ -38,8 +38,8 @@ _cono cono(0.5, 1, 24);
 _esfera esfera(1, 6, 24);
 _lego lego;
 
-int mov = 0, flag_izq = 0, flag_der = 0;
-
+int flag_izq = 0, flag_der = 0;
+float mov = 0.0;
 // _objeto_ply *ply1;
 
 
@@ -141,7 +141,7 @@ void draw_objects()
 			esfera.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
 			break;
         case LEGO:
-            lego.draw(modo, 0.5, 0.1, 1.0, 0.19, 0.87, 1.0, 2);
+            lego.draw(modo, 1, 1, 1, 0.9, 0.9, 9, 2);
             break;
 	}
 }
@@ -201,7 +201,8 @@ switch (toupper(Tecla1)){
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
     case '5':mov = 3; break;
-    case '6':mov = 0;
+    case '6':mov = 0.5; break;
+    case '7':mov = 0;
         lego.giro_brazo_izq = 0;
         lego.giro_brazo_der = 0;
         lego.giro_pierna_izq = 0;
