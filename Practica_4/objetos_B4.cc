@@ -110,13 +110,41 @@ void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, 
 // dibujar iluminacion suave
 //*************************************************************************
 
-void 	_triangulos3D::draw_iluminacion_suave( ){}
+void _triangulos3D::draw_iluminacion_suave(){
+    int i;
+    
+    if(!b_normales_vertices)
+        calcular_normales_vertices(); //Calculamos lasnormales alas caras si no se han calcuado ya
+
+    glEnable (GL_LIGHTING);
+    glShadeModel(GL_SMOOTH);  //GL_SMOOTH
+    glEnable(GL_NORMALIZE); //En caso de scale, si no, lo podemos quitar
+
+    //Fijar color
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,(GLfloat *) &ambiente_difusa);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(GLfloat *) &especular);
+    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,brillo);
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glBegin(GL_TRIANGLES);
+    for (i=0;i<caras.size();i++){
+        glNormal3fv((GLfloat *) &normales_vertices[caras[i]._0]);
+        glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
+        glNormal3fv((GLfloat *) &normales_vertices[caras[i]._1]);
+        glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
+        glNormal3fv((GLfloat *) &normales_vertices[caras[i]._2]);
+        glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
+        }
+    glEnd();
+
+    glDisable(GL_LIGHTING);
+}
 
 //*************************************************************************
 // dibujar iluminacion plana
 //*************************************************************************
 
-void 	_triangulos3D::draw_iluminacion_plana( ){
+void _triangulos3D::draw_iluminacion_plana(){
   int i;
   if (b_normales_caras==false) calcular_normales_caras(); //Calculamos lasnormales alas caras s i no se han calcuado ys
   
@@ -146,7 +174,7 @@ void 	_triangulos3D::draw_iluminacion_plana( ){
 // calcular normales a caras
 //*************************************************************************
 
-void _triangulos3D::calcular_normales_caras (){
+void _triangulos3D::calcular_normales_caras(){
     
   _vertex3f a1, a2, n;
   normales_caras.resize(caras.size());
@@ -164,6 +192,47 @@ void _triangulos3D::calcular_normales_caras (){
     
   b_normales_caras=true;
 }
+
+//*************************************************************************
+// calcular normales a vertices
+//*************************************************************************
+
+void _triangulos3D::calcular_normales_vertices(){
+    _vertex3f sumatoriaNormales, media;
+
+    float numNormales=0.0;
+    normales_vertices.resize(vertices.size());
+
+    if(!b_normales_caras)
+        calcular_normales_caras();
+
+    for(int i=0; i<vertices.size(); i++){
+        sumatoriaNormales.x=0;
+        sumatoriaNormales.y=0;
+        sumatoriaNormales.z=0;
+
+        for (int j=0; j<caras.size(); j++){
+            if (vertices[caras[j]._0] == vertices[i] || vertices[caras[j]._1] == vertices[i] || vertices[caras[j]._2] == vertices[i]){
+                sumatoriaNormales.x+=normales_caras[j].x;
+                sumatoriaNormales.y+=normales_caras[j].y;
+                sumatoriaNormales.z+=normales_caras[j].z;
+                numNormales++;
+            }
+        }
+
+        media.x=sumatoriaNormales.x/numNormales;
+        media.y=sumatoriaNormales.y/numNormales;
+        media.z=sumatoriaNormales.z/numNormales;
+
+        // modulo
+        float modulo = sqrt(media.x*media.x+media.y*media.y+media.z*media.z);
+        // normalización
+        normales_vertices[i]= _vertex3f(media.x/modulo, media.y/modulo, media.z/modulo);
+    }
+
+    b_normales_vertices=true; 
+}
+
 
 //*************************************************************************
 // dibujar con distintos modos
@@ -841,14 +910,14 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
         for(int j = 0; j < num - 1; j++){
             for(int i = 0; i < num_aux - 1; i++){
                 caras[c]._0 = j * num_aux + i;
-                caras[c]._1 = ( j + 1 ) * num_aux + i + 1;
-                caras[c]._2 = ( j + 1 ) * num_aux + i;
+                caras[c]._2 = ( j + 1 ) * num_aux + i + 1;
+                caras[c]._1 = ( j + 1 ) * num_aux + i;
 
                 c++;
 
                 caras[c]._0 = j * num_aux + i;
-                caras[c]._1 = j * num_aux + i + 1;
-                caras[c]._2 = ( j + 1 ) * num_aux + i + 1;
+                caras[c]._2 = j * num_aux + i + 1;
+                caras[c]._1 = ( j + 1 ) * num_aux + i + 1;
 
                 c++;
             }
@@ -857,14 +926,14 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
         // Tratamiento para las ultimas caras
         for(int i = 0; i < num_aux - 1; i++){
             caras[c]._0 = num * num_aux - num_aux + i;
-            caras[c]._1 = i + 1;
-            caras[c]._2 = i;
+            caras[c]._2 = i + 1;
+            caras[c]._1 = i;
 
             c++;
 
             caras[c]._0 = num * num_aux - num_aux + i;
-            caras[c]._1 = num * num_aux - (num_aux - i - 1);
-            caras[c]._2 = i + 1;
+            caras[c]._2 = num * num_aux - (num_aux - i - 1);
+            caras[c]._1 = i + 1;
 
             c++;
         }
@@ -891,15 +960,15 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
     {
         for(int i = 0; i < num - 1; i++){
             caras[c]._0 = (i + 1) * num_aux - 1;
-            caras[c]._1 = vertices.size() - 1;
-            caras[c]._2 = (i + 2) * num_aux - 1;
+            caras[c]._2 = vertices.size() - 1;
+            caras[c]._1 = (i + 2) * num_aux - 1;
 
             c++;
         }
 
         caras[c]._0 = num_aux * num - 1;
-        caras[c]._1 = vertices.size() - 1;
-        caras[c]._2 = num_aux - 1;
+        caras[c]._2 = vertices.size() - 1;
+        caras[c]._1 = num_aux - 1;
 
         c++;
     }
@@ -921,15 +990,15 @@ void _rotacion::parametros(vector<_vertex3f> perfil, int num, int tipo)
     {
         for(int i = 0; i < num - 1; i++){
             caras[c]._0 = i * num_aux;
-            caras[c]._1 = vertices.size() - 1;
-            caras[c]._2 = num_aux * (i + 1);
+            caras[c]._2 = vertices.size() - 1;
+            caras[c]._1 = num_aux * (i + 1);
 
             c++;
         }
 
         caras[c]._0 = 0;
-        caras[c]._1 = vertices.size() - 1;
-        caras[c]._2 = num_aux * (num - 1);
+        caras[c]._2 = vertices.size() - 1;
+        caras[c]._1 = num_aux * (num - 1);
 
         c++;
 
