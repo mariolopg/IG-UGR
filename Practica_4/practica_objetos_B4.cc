@@ -15,6 +15,8 @@ using namespace std;
 typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, CILINDRO, CONO, ESFERA, LEGO} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
+float giro_camara = 0;
+float alfa = 0;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -149,17 +151,29 @@ void draw_objects()
 //**************************************************************************
 // LUCES
 //***************************************************************************
- void luces (){
+ void luces (float alfa, float beta){
 	float  luz1[]={1.0, 1.0, 1.0, 1.0},
-			pos1[]= {0, 20.0, 40.0, 1.0}; //Cuidado con no ponerla dentro del objeto
+			pos1[]= {0, 20.0, 40.0, 1.0}, //Cuidado con no ponerla dentro del objeto
+            luz2[]={1.0, 0.0, 0.0, 1.0},
+			pos2[]= {0, 0, 10.0, 1.0};
 
 	glLightfv (GL_LIGHT1, GL_DIFFUSE, luz1); 
 	glLightfv (GL_LIGHT1, GL_SPECULAR, luz1); //Si no le ponemos componente esepcular, no tiene brillo, por lo qeu no cambia segun observador
+    glLightfv (GL_LIGHT2, GL_DIFFUSE, luz2); 
+	glLightfv (GL_LIGHT2, GL_SPECULAR, luz2);
+
 
 	glLightfv (GL_LIGHT1, GL_POSITION, pos1);
+	glLightfv (GL_LIGHT2, GL_POSITION, pos2);
+
+    glPushMatrix();
+    glRotatef(beta, 0, 1, 0);
+    glLightfv (GL_LIGHT2, GL_POSITION, pos2);
+    glPopMatrix();
 
 	glDisable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
  }
 
 
@@ -169,13 +183,12 @@ void draw_objects()
 
 void draw(void)
 {
-
-clean_window();
-change_observer();
-luces();
-draw_axis();
-draw_objects();
-glutSwapBuffers();
+    clean_window();
+    change_observer();
+    luces(alfa, giro_camara);
+    draw_axis();
+    draw_objects();
+    glutSwapBuffers();
 }
 
 
@@ -190,13 +203,13 @@ glutSwapBuffers();
 
 void change_window_size(int Ancho1,int Alto1)
 {
-float Aspect_ratio;
+    float Aspect_ratio;
 
-Aspect_ratio=(float) Alto1/(float )Ancho1;
-Size_y=Size_x*Aspect_ratio;
-change_projection();
-glViewport(0,0,Ancho1,Alto1);
-glutPostRedisplay();
+    Aspect_ratio=(float) Alto1/(float )Ancho1;
+    Size_y=Size_x*Aspect_ratio;
+    change_projection();
+    glViewport(0,0,Ancho1,Alto1);
+    glutPostRedisplay();
 }
 
 
@@ -236,6 +249,7 @@ switch (toupper(Tecla1)){
     case 'L':t_objeto=LEGO;break;
     case '9': modo = SOLID_ILLUMINATED_FLAT;break;
 	case '0': modo = SOLID_ILLUMINATED_GOURAUD; break;
+    case 'K': giro_camara += 10;
 	}
 glutPostRedisplay();
 }

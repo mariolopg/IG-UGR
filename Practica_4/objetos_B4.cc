@@ -114,7 +114,10 @@ void _triangulos3D::draw_iluminacion_suave(){
     int i;
     
     if(!b_normales_vertices)
-        calcular_normales_vertices(); //Calculamos lasnormales alas caras si no se han calcuado ya
+        calcular_normales_vertices(); //Calculamos las normales a los vertices si no se han calcuado ya
+
+    if(!b_normales_caras)
+        calcular_normales_caras(); //Calculamos las normales a las caras si no se han calcuado ya
 
     glEnable (GL_LIGHTING);
     glShadeModel(GL_SMOOTH);  //GL_SMOOTH
@@ -146,7 +149,7 @@ void _triangulos3D::draw_iluminacion_suave(){
 
 void _triangulos3D::draw_iluminacion_plana(){
   int i;
-  if (b_normales_caras==false) calcular_normales_caras(); //Calculamos lasnormales alas caras s i no se han calcuado ys
+  if (b_normales_caras==false) calcular_normales_caras(); //Calculamos las normales a las caras si no se han calculado
   
   glEnable (GL_LIGHTING);
   glShadeModel(GL_FLAT);  //GL_SMOOTH
@@ -198,36 +201,19 @@ void _triangulos3D::calcular_normales_caras(){
 //*************************************************************************
 
 void _triangulos3D::calcular_normales_vertices(){
-    _vertex3f sumatoriaNormales, media;
 
-    float numNormales=0.0;
     normales_vertices.resize(vertices.size());
 
-    if(!b_normales_caras)
-        calcular_normales_caras();
-
     for(int i=0; i<vertices.size(); i++){
-        sumatoriaNormales.x=0;
-        sumatoriaNormales.y=0;
-        sumatoriaNormales.z=0;
+        normales_vertices[i].x=0;
+        normales_vertices[i].y=0;
+        normales_vertices[i].z=0;
+    }
 
-        for (int j=0; j<caras.size(); j++){
-            if (vertices[caras[j]._0] == vertices[i] || vertices[caras[j]._1] == vertices[i] || vertices[caras[j]._2] == vertices[i]){
-                sumatoriaNormales.x+=normales_caras[j].x;
-                sumatoriaNormales.y+=normales_caras[j].y;
-                sumatoriaNormales.z+=normales_caras[j].z;
-                numNormales++;
-            }
-        }
-
-        media.x=sumatoriaNormales.x/numNormales;
-        media.y=sumatoriaNormales.y/numNormales;
-        media.z=sumatoriaNormales.z/numNormales;
-
-        // modulo
-        float modulo = sqrt(media.x*media.x+media.y*media.y+media.z*media.z);
-        // normalización
-        normales_vertices[i]= _vertex3f(media.x/modulo, media.y/modulo, media.z/modulo);
+    for (int i=0; i<caras.size(); i++){
+        normales_vertices[caras[i]._0]+=normales_caras[i];
+        normales_vertices[caras[i]._1]+=normales_caras[i];
+        normales_vertices[caras[i]._2]+=normales_caras[i];
     }
 
     b_normales_vertices=true; 
@@ -298,36 +284,41 @@ _cubo::_cubo(float tam)
 
     // triangulos
     caras.resize(12);
-    caras[0]._0 = 0;
-    caras[0]._1 = 1;
+    caras[0]._0 = 1;
+    caras[0]._1 = 0;
     caras[0]._2 = 3;
-    caras[1]._0 = 2;
-    caras[1]._1 = 3;
+    caras[1]._0 = 3;
+    caras[1]._1 = 2;
     caras[1]._2 = 1;
+
     caras[2]._0 = 1;
     caras[2]._1 = 2;
     caras[2]._2 = 6;
     caras[3]._0 = 2;
     caras[3]._1 = 7;
     caras[3]._2 = 6;
+    
     caras[4]._0 = 2;
     caras[4]._1 = 4;
     caras[4]._2 = 7;
     caras[5]._0 = 2;
     caras[5]._1 = 3;
     caras[5]._2 = 4;
-    caras[6]._0 = 3;
+    
+    caras[6]._0 = 0;
     caras[6]._1 = 4;
-    caras[6]._2 = 0;
+    caras[6]._2 = 3;
     caras[7]._0 = 0;
-    caras[7]._1 = 4;
-    caras[7]._2 = 5;
+    caras[7]._1 = 5;
+    caras[7]._2 = 4;
+    
     caras[8]._0 = 0;
-    caras[8]._1 = 5;
-    caras[8]._2 = 6;
+    caras[8]._1 = 6;
+    caras[8]._2 = 5;
     caras[9]._0 = 1;
-    caras[9]._1 = 0;
-    caras[9]._2 = 6;
+    caras[9]._1 = 6;
+    caras[9]._2 = 0;
+    
     caras[10]._0 = 6;
     caras[10]._1 = 7;
     caras[10]._2 = 4;
@@ -441,6 +432,15 @@ _esfera::_esfera(float radio, int n, int m)
     }
 
     parametros(perfil1, m, 2);
+
+    normales_vertices.resize(vertices.size());
+    for(int i=0; i<vertices.size(); i++){
+        normales_vertices[i].x=vertices[i].x;
+        normales_vertices[i].y=vertices[i].y;
+        normales_vertices[i].z=vertices[i].z;
+    }
+
+    b_normales_vertices=true;
 }
 
 //*************************************************************************
@@ -449,6 +449,11 @@ _esfera::_esfera(float radio, int n, int m)
 
 _trapecio::_trapecio(float tam)
 {
+
+    ambiente_difusa = _vertex4f(1, 1, 1, 1.0); //coeficientes ambiente y difuso
+    especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    brillo = 32;
+
     //vertices
     vertices.resize(8);
     vertices[0].x = -tam/2*0.7; vertices[0].y = tam/2; vertices[0].z = tam/2;
@@ -475,8 +480,8 @@ _trapecio::_trapecio(float tam)
     caras[6]._0 = 1; caras[6]._1 = 0; caras[6]._2 = 4;
     caras[7]._0 = 1; caras[7]._1 = 4; caras[7]._2 = 5;
 
-    caras[8]._0 = 5; caras[8]._1 = 7; caras[8]._2 = 4;
-    caras[9]._0 = 5; caras[9]._1 = 6; caras[9]._2 = 7;
+    caras[8]._0 = 5; caras[8]._1 = 4; caras[8]._2 = 7;
+    caras[9]._0 = 5; caras[9]._1 = 7; caras[9]._2 = 6;
 
     caras[10]._0 = 1; caras[10]._1 = 2; caras[10]._2 = 6;
     caras[11]._0 = 1; caras[11]._1 = 6; caras[11]._2 = 5;
@@ -490,6 +495,10 @@ _cabeza_lego::_cabeza_lego()
 {
     vector<_vertex3f> cabeza;
     _vertex3f aux;
+
+    ambiente_difusa = _vertex4f(1, 1, 0.0, 1.0); //coeficientes ambiente y difuso
+    especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    brillo = 32; 
 
     //Mitad inferior
     aux.x = 0.2; aux.y = -0.5; aux.z = 0; cabeza.push_back(aux);
@@ -525,6 +534,9 @@ _cabeza_lego::_cabeza_lego()
 
 _ojo_lego::_ojo_lego(){
     pupila = new _esfera(1, 24, 24);
+    pupila->ambiente_difusa = _vertex4f(0, 0, 0, 1.0); //coeficientes ambiente y difuso
+    pupila->especular = _vertex4f(0, 0, 0, 1.0);       //coeficiente especular
+    pupila->brillo = 32;
 }
 
 void _ojo_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
@@ -556,6 +568,18 @@ _brazo_lego::_brazo_lego(){
     articulacion = new _cilindro(0.5, 1, 24);
     hombro = new _esfera(1, 24, 24);
     antebrazo = new _cilindro(0.5, 1, 24);
+
+    articulacion->ambiente_difusa = _vertex4f(1, 1, 1, 1.0); //coeficientes ambiente y difuso
+    articulacion->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    articulacion->brillo = 32;
+    
+    hombro->ambiente_difusa = _vertex4f(1, 1, 1, 1.0); //coeficientes ambiente y difuso
+    hombro->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    hombro->brillo = 32;
+
+    antebrazo->ambiente_difusa = _vertex4f(1, 1, 1, 1.0); //coeficientes ambiente y difuso
+    antebrazo->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    antebrazo->brillo = 32;
 }
 
 void _brazo_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
@@ -593,6 +617,22 @@ _mano_lego::_mano_lego(){
     palma = new _cubo(1);
     dedos_izq = new _cubo(1);
     dedos_der = new _cubo(1);
+
+    munheca->ambiente_difusa = _vertex4f(1, 1, 0.0, 1.0); //coeficientes ambiente y difuso
+    munheca->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    munheca->brillo = 32;
+
+    palma->ambiente_difusa = _vertex4f(1, 1, 0.0, 1.0); //coeficientes ambiente y difuso
+    palma->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    palma->brillo = 32;
+
+    dedos_izq->ambiente_difusa = _vertex4f(1, 1, 0.0, 1.0); //coeficientes ambiente y difuso
+    dedos_izq->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    dedos_izq->brillo = 32;
+
+    dedos_der->ambiente_difusa = _vertex4f(1, 1, 0.0, 1.0); //coeficientes ambiente y difuso
+    dedos_der->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    dedos_der->brillo = 32;
 }
 
 void _mano_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
@@ -634,6 +674,18 @@ _pelvis_lego::_pelvis_lego(){
     cintura = new _cubo(1);
     ingle = new _cilindro(0.5, 1, 24);
     articulacion_piernas = new _cilindro(0.5, 1, 24);
+
+    cintura->ambiente_difusa = _vertex4f(0.775, 0.459, 0.2, 1.0); //coeficientes ambiente y difuso
+    cintura->especular = _vertex4f(0.775, 0.459, 0.2, 1.0);       //coeficiente especular
+    cintura->brillo = 25.6;
+
+    ingle->ambiente_difusa = _vertex4f(51/255, 102/255, 1, 1.0); //coeficientes ambiente y difuso
+    ingle->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    ingle->brillo = 32;
+
+    articulacion_piernas->ambiente_difusa = _vertex4f(51/255, 102/255, 1, 1.0); //coeficientes ambiente y difuso
+    articulacion_piernas->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    articulacion_piernas->brillo = 32;
 }
 
 void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
@@ -669,6 +721,18 @@ _pierna_lego::_pierna_lego(){
     cuadriceps = new _cilindro(0.5, 1, 24);
     gemelo = new _cubo(1);
     pie = new _cubo(1);
+
+    cuadriceps->ambiente_difusa = _vertex4f(51/255, 102/255, 1, 1.0); //coeficientes ambiente y difuso
+    cuadriceps->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    cuadriceps->brillo = 32;
+
+    gemelo->ambiente_difusa = _vertex4f(51/255, 102/255, 1, 1.0); //coeficientes ambiente y difuso
+    gemelo->especular = _vertex4f(0.6, 0.6, 0.5, 1.0);       //coeficiente especular
+    gemelo->brillo = 32;
+
+    pie->ambiente_difusa = _vertex4f(0.25, 0.23, 0.103, 1.0); //coeficientes ambiente y difuso
+    pie->especular = _vertex4f(0.775, 0.459, 0.2, 1.0);       //coeficiente especular
+    pie->brillo = 25.6;
 }
 
 void _pierna_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
