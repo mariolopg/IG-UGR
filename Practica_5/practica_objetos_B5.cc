@@ -236,8 +236,9 @@ void draw(void)
     clean_window();
 
     if(cambio == 0){
-        change_observer();
         glViewport(0,0, ancho, alto);
+        change_projection();
+        change_observer();
         draw_axis();
         draw_objects();
     }
