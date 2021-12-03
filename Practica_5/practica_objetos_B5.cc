@@ -239,24 +239,21 @@ void draw(void)
         glViewport(0,0, ancho, alto);
         change_projection();
         change_observer();
+        luces(alfa, giro_camara);
         draw_axis();
         draw_objects();
     }
     else
         vista_orto();
 
-    luces(alfa, giro_camara);
-    draw_axis();
-    draw_objects();
-    glutSwapBuffers();
 
-    // if (t_objeto == LEGO)
-    // {
-    //     glDrawBuffer(GL_BACK);
-    //     clean_window();
-    //     change_observer();
-    //     // tanque.seleccion();
-    // }
+    if (t_objeto == LEGO)
+    {
+        glDrawBuffer(GL_BACK);
+        clean_window();
+        change_observer();
+        lego.seleccion();
+    }
 
     glFlush();
 }
@@ -541,26 +538,26 @@ void RatonMovido(int x, int y)
     }
 }
 
-// void procesar_color(unsigned char color[3])
-// {
-//     int i;
+void procesar_color(unsigned char color[3])
+{
+    int i;
 
-//     for (i = 0; i < lego.piezas; i++)
-//     {
-//         if (color[0] == lego.color_selec[0][i])
-//         {
-//             if (lego.activo[i] == 0)
-//             {
-//                 lego.activo[i] = 1;
-//             }
-//             else
-//             {
-//                 lego.activo[i] = 0;
-//             }
-//             glutPostRedisplay();
-//         }
-//     }
-// }
+    for (i = 0; i < lego.piezas; i++)
+    {
+        if (color[0] == lego.color_selec[0][i])
+        {
+            if (lego.activo[i] == 0)
+            {
+                lego.activo[i] = 1;
+            }
+            else
+            {
+                lego.activo[i] = 0;
+            }
+            glutPostRedisplay();
+        }
+    }
+}
 
 void pick_color(int x, int y)
 {

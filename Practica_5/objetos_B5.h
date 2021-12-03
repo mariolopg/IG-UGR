@@ -9,7 +9,7 @@
 
 
 const float AXIS_SIZE=5000;
-typedef enum{POINTS,EDGES,SOLID_CHESS,SOLID, SOLID_ILLUMINATED_FLAT, SOLID_ILLUMINATED_GOURAUD} _modo;
+typedef enum{POINTS,EDGES,SOLID_CHESS,SOLID, SOLID_ILLUMINATED_FLAT, SOLID_ILLUMINATED_GOURAUD, SELECT} _modo;
 
 //*************************************************************************
 // clase punto
@@ -38,6 +38,7 @@ public:
 void 	draw_aristas(float r, float g, float b, int grosor);
 void    draw_solido(float r, float g, float b);
 void 	draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2);
+void    draw_seleccion(int r, int g, int b);
 void 	draw_iluminacion_plana( );
 void 	draw_iluminacion_suave( );
 
@@ -214,7 +215,8 @@ class _lego: public _rotacion{
 	public:
 		_lego();
 		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
-	
+		void seleccion();
+
 		//Giro cabeza
 		float giro_cabeza;
 		float giro_cabeza_min;
@@ -233,8 +235,8 @@ class _lego: public _rotacion{
 		float giro_pierna_max;
 
 		float  color_pick[3];
-		int    color_selec[3][3];
-		int    activo[3];
+		int    color_selec[3][11];
+		int    activo[11];
 		int    piezas;
 	
 	protected:
