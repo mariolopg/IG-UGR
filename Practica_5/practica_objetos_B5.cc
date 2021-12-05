@@ -569,7 +569,7 @@ void pick_color(int x, int y)
     glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_UNSIGNED_BYTE,(GLubyte *) &pixel[0]);
     printf(" valor x %d, valor y %d, color %d, %d, %d \n",x,y,pixel[0],pixel[1],pixel[2]);
 
-    // procesar_color(pixel);
+    procesar_color(pixel);
 }
 
 

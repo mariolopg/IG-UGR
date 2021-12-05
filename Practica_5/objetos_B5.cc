@@ -566,7 +566,7 @@ void _ojo_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g
     //pupila
     glPushMatrix();
     glScalef(0.03, 0.03, 0.03);
-    pupila->draw(modo, 0, 0, 0, r2, g2, b2, grosor);
+    pupila->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
     glPopMatrix();
 }
 
@@ -806,9 +806,9 @@ _lego::_lego(){
 
     int c = 100;
     piezas = 11;
-    color_pick[0]=1.0;
+    color_pick[0]=0.5;
     color_pick[1]=0.0;
-    color_pick[2]=0.0;
+    color_pick[2]=1.0;
     for (int i = 0; i < piezas; i++)
     {
         activo[i] = 0;
@@ -922,7 +922,7 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
         glPushMatrix();
         glTranslatef(0.45, -1.125, 0);
         glRotatef(giro_pierna_der, 1, 0, 0);
-        if(activo[10] == 1) pierna_izquierda.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
+        if(activo[10] == 1) pierna_derecha.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
         else pierna_derecha.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
         glPopMatrix();
     glPopMatrix();
@@ -1030,7 +1030,7 @@ void _lego::seleccion()
         glTranslatef(0.45, -1.125, 0);
         glRotatef(giro_pierna_der, 1, 0, 0);
         c = color_selec[0][10];
-        pierna_izquierda.draw(SELECT, c, c, c, c, c, c, 1);
+        pierna_derecha.draw(SELECT, c, c, c, c, c, c, 1);
         glPopMatrix();
     glPopMatrix();
 
