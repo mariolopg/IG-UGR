@@ -711,7 +711,7 @@ _pelvis_lego::_pelvis_lego(){
     articulacion_piernas->brillo = 32;
 }
 
-void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
+void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float r3, float g3, float b3, float r4, float g4, float b4, float grosor){
 
     //Ingle
     glPushMatrix();
@@ -732,7 +732,7 @@ void _pelvis_lego::draw(_modo modo, float r1, float g1, float b1, float r2, floa
     //Cintura
     glPushMatrix();
     glScalef(1.62, 0.25, 0.5);
-    cintura->draw(modo, 153.0/255, 102.0/255, 51.0/255, 153.0/255 - 0.1, 102.0/255 - 0.1, 51.0/255 - 0.1, grosor);
+    cintura->draw(modo, r3, g3, b3, r4, g4, b4, grosor);
     glPopMatrix();
 }
 
@@ -758,7 +758,7 @@ _pierna_lego::_pierna_lego(){
     pie->brillo = 25.6;
 }
 
-void _pierna_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor){
+void _pierna_lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float r3, float g3, float b3, float r4, float g4, float b4, float grosor){
     
     //cuadricep
     glPushMatrix();
@@ -778,7 +778,8 @@ void _pierna_lego::draw(_modo modo, float r1, float g1, float b1, float r2, floa
     glPushMatrix();
     glTranslatef(0, -0.9, 0.14);
     glScalef(0.71, 0.2, 0.8);
-    gemelo->draw(modo, 153.0/255, 102.0/255, 51.0/255, 153.0/255 - 0.1, 102.0/255 - 0.1, 51.0/255 - 0.1, grosor);
+    pie->draw(modo, r3, g3, b3, r4, g4, b4, grosor);
+    
     glPopMatrix();
 }
 
@@ -813,7 +814,7 @@ _lego::_lego(){
     {
         activo[i] = 0;
         color_selec[0][i] = color_selec[1][i] = color_selec[2][i] = c;
-        c = c + 20;
+        c = c + 10;
     }
 }
 
@@ -906,24 +907,24 @@ void _lego::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
         //Pelvis
         glPushMatrix();
         glTranslatef(0, -0.875, 0);
-        if(activo[8] == 1) pelvis.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
-        else pelvis.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
+        if(activo[8] == 1) pelvis.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
+        else pelvis.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, 153.0/255, 102.0/255, 51.0/255, 153.0/255 - 0.1, 102.0/255 - 0.1, 51.0/255 - 0.1, grosor);
         glPopMatrix();
 
         //Pierna izquierda
         glPushMatrix();
         glTranslatef(-0.45, -1.125, 0);
         glRotatef(giro_pierna_izq, 1, 0, 0);
-        if(activo[9] == 1) pierna_izquierda.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
-        else pierna_izquierda.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
+        if(activo[9] == 1) pierna_izquierda.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
+        else pierna_izquierda.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, 153.0/255, 102.0/255, 51.0/255, 153.0/255 - 0.1, 102.0/255 - 0.1, 51.0/255 - 0.1, grosor);
         glPopMatrix();
 
         //Pierna derecha
         glPushMatrix();
         glTranslatef(0.45, -1.125, 0);
         glRotatef(giro_pierna_der, 1, 0, 0);
-        if(activo[10] == 1) pierna_derecha.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
-        else pierna_derecha.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, grosor);
+        if(activo[10] == 1) pierna_derecha.draw(modo, r_p, g_p, b_p, r_p, g_p, b_p, r_p, g_p, b_p, r_p, g_p, b_p, grosor);
+        else pierna_derecha.draw(modo, 51/255, 102/255, 1, 51/255 - 0.1, 102/255 - 0.1, 0.9, 153.0/255, 102.0/255, 51.0/255, 153.0/255 - 0.1, 102.0/255 - 0.1, 51.0/255 - 0.1, grosor);
         glPopMatrix();
     glPopMatrix();
 }
@@ -1014,7 +1015,7 @@ void _lego::seleccion()
         glPushMatrix();
         glTranslatef(0, -0.875, 0);
         c = color_selec[0][8];
-        pelvis.draw(SELECT, c, c, c, c, c, c, 1);
+        pelvis.draw(SELECT, c, c, c, c, c, c, c, c, c, c, c, c, 1);
         glPopMatrix();
 
         //Pierna izquierda
@@ -1022,7 +1023,7 @@ void _lego::seleccion()
         glTranslatef(-0.45, -1.125, 0);
         glRotatef(giro_pierna_izq, 1, 0, 0);
         c = color_selec[0][9];
-        pierna_izquierda.draw(SELECT, c, c, c, c, c, c, 1);
+        pierna_izquierda.draw(SELECT, c, c, c, c, c, c, c, c, c, c, c, c, 1);
         glPopMatrix();
 
         //Pierna derecha
@@ -1030,7 +1031,7 @@ void _lego::seleccion()
         glTranslatef(0.45, -1.125, 0);
         glRotatef(giro_pierna_der, 1, 0, 0);
         c = color_selec[0][10];
-        pierna_derecha.draw(SELECT, c, c, c, c, c, c, 1);
+        pierna_derecha.draw(SELECT, c, c, c, c, c, c, c, c, c, c, c, c, 1);
         glPopMatrix();
     glPopMatrix();
 

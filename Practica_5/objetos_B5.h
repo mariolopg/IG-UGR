@@ -192,7 +192,7 @@ class _mano_lego: public _rotacion{
 class _pelvis_lego: public _rotacion{
 	public:
 		_pelvis_lego();
-		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float r3, float g3, float b3, float r4, float g4, float b4, float grosor);
 
 	protected:
 		_cubo *cintura;
@@ -203,7 +203,7 @@ class _pelvis_lego: public _rotacion{
 class _pierna_lego: public _rotacion{
 	public:
 		_pierna_lego();
-		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+		void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float r3, float g3, float b3, float r4, float g4, float b4, float grosor);
 
 	protected:
 		_cilindro *cuadriceps;
